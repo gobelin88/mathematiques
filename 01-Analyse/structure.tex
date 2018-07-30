@@ -1,0 +1,144 @@
+\input{fig/myTikz.tex}
+
+%///////////////////////////////////////////////////////////
+%STYLE & MISE EN PAGE
+
+\geometry{hmargin=1.5cm,vmargin=1.5cm}
+\setlength{\parindent}{0cm}
+
+\bibliographystyle{apalike-fr}
+
+\newcommand{\mycolor}{MidnightBlue}
+\sectionfont{\color{\mycolor}}
+\subsectionfont{\color{\mycolor}}
+\subsubsectionfont{\color{\mycolor}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=\mycolor
+}
+\newcommand{\graphsize}{0.3}
+\newcommand{\proof}{\color{Orange}{(démonstration requise)}}
+\newcommand{\here}{\color{Blue}{(<---ici)}}
+\newcommand{\workon}{\color{Blue}{(en cours)}}
+\newcommand{\verif}{\color{Orange}{(à vérifier)}}
+\newcommand{\todo}{\color{PineGreen}{(à faire)}}
+\newcommand{\fig}{\color{PineGreen}{(figure requise)}}
+
+\pagestyle{fancy}
+\fancyhf{} 
+\rfoot{Page \thepage \hspace{1pt} of \pageref{LastPage}}
+
+%///////////////////////////////////////////////////////////
+%//MATHS
+
+\newcommand{\Heav}{\mathcal{H}}
+\newcommand{\VP}{ \mathcal{V}.\mathcal{P}. }
+
+%//CEIL FLOOR
+\providecommand{\floor}[1]{\left \lfloor #1 \right \rfloor }
+\providecommand{\ceil}[1]{\left \lceil #1 \right \rceil }
+
+%//OPERATEURS
+\newcommand{\op}[1]{\mathbf{#1}}
+\newcommand{\opp}[2]{\op{#1}^{#2}}
+\newcommand{\applyop}[2]{\op{#1}\bm{\left[}#2\bm{\right]}}
+\newcommand{\applyopp}[3]{\op{#1}^{#2}\bm{\left[}#3\bm{\right]}}
+
+%//PRODUIT SCALAIRE
+\newcommand{\scal}[2]{\langle #1 \mid #2\rangle}
+
+%//INTEGRATION PAR PARTIE
+\newcommand{\intp}[6]
+{\left\{
+\begin{array}{ll}
+\int (uv')=[uv]-\int (u'v)&\\
+u=#1 & u'=#2\\
+v'=#3 & v=#4\\
+%\int (#1 #3)=[#1 #4]_{#5}^{#6}-\int_{#5}^{#6} #2 #4&\\
+\end{array}
+\right.}
+
+%///////////////////////////////////////////////////////////
+%//FIGURES
+
+\newcommand{\graphtriplefunction}[6]
+{
+\begin{figure}[H]
+\centering
+\begin{tabular}{ccc}
+\includegraphics[scale=0.3]{./img/cpp/#1.png}&
+\includegraphics[scale=0.3]{./img/cpp/#3.png}&
+\includegraphics[scale=0.3]{./img/cpp/#5.png}\\
+\end{tabular}
+\caption{Graphique des fonctions #2 et #4 et #6.}
+\end{figure}
+}
+\newcommand{\graphdoublefunction}[4]
+{
+\begin{figure}[H]
+\centering
+\begin{tabular}{cc}
+\includegraphics[scale=0.4]{./img/cpp/#1.png}&
+\includegraphics[scale=0.4]{./img/cpp/#3.png}\\
+\end{tabular}
+\caption{Graphique des fonctions #2 et #4.}
+\end{figure}
+}
+\newcommand{\graphfunction}[2]
+{
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.35]{./img/cpp/#1.png}
+\caption{Graphique de la fonction #2.}
+\end{figure}
+}
+\newcommand{\graphpartiallow}[3]
+{
+Si on regarde la convergence des sommes partielles dans le plan complexe on obtient:
+\begin{figure}[H]
+\centering
+\begin{tabular}{cccccc}
+$n=2$&
+$n=4$&
+$n=8$&
+$n=16$&
+$n=32$&
+#2\\
+\includegraphics[scale=0.15]{./img/cpp/#1#3_2.png}&
+\includegraphics[scale=0.15]{./img/cpp/#1#3_4.png}&
+\includegraphics[scale=0.15]{./img/cpp/#1#3_8.png}&
+\includegraphics[scale=0.15]{./img/cpp/#1#3_16.png}&
+\includegraphics[scale=0.15]{./img/cpp/#1#3_32.png}&
+\includegraphics[scale=0.15]{./img/cpp/#1.png}\\
+\end{tabular}
+\caption{Convergence des sommes partielles de #2.}
+\end{figure}
+}
+\newcommand{\graphpartialhigh}[3]
+{
+Si on regarde la convergence des sommes partielles dans le plan complexe on obtient:
+\begin{figure}[H]
+\centering
+\begin{tabular}{cccccc}
+$n=4$&
+$n=8$&
+$n=16$&
+$n=32$&
+$n=64$&
+#2\\
+\includegraphics[scale=0.15]{./img/cpp/#1#3_4.png}&
+\includegraphics[scale=0.15]{./img/cpp/#1#3_8.png}&
+\includegraphics[scale=0.15]{./img/cpp/#1#3_16.png}&
+\includegraphics[scale=0.15]{./img/cpp/#1#3_32.png}&
+\includegraphics[scale=0.15]{./img/cpp/#1#3_64.png}&
+\includegraphics[scale=0.15]{./img/cpp/#1.png}\\
+\end{tabular}
+\caption{Convergence des sommes partielles de #2.}
+\end{figure}
+}
+
+%///////////////////////////////////////////////////////////
+%//MACROS & TITLE
+\newcommand{\rinf}{\textbf{Rayon de convergence:} La fonction de possède pas de pôle le rayon de convergence est donc infini: $\boxed{r=\infty}$\\}
+\newcommand{\notes}[1]{\textbf{\underline{Notes:}}\textit{ "#1"}}

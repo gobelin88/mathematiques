@@ -1,0 +1,802 @@
+\documentclass[table]{article}
+\usepackage[francais]{babel}
+\usepackage{float}
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{bbm}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage{tikz}
+\usepackage{braket}
+
+\title{
+\rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt}
+\rule{\textwidth}{0.4pt}\\[\baselineskip]
+\textbf{LES ESPACES VECTORIELS LINÉAIRES}\\
+Formalisme de Dirac
+\rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt}
+\rule{\textwidth}{1.6pt}\\[\baselineskip]
+}
+\author{
+\small{Loïc HUGUEL}\\
+\small{\href{mailto:loic.huguel88@gmail.com}{loic.huguel88@gmail.com}}\\
+\vspace{0.5cm}\\
+\LaTeX\\
+TikZ version : \pgfversion
+}
+
+\geometry{hmargin=1.5cm,vmargin=1.5cm}
+\setlength{\parindent}{0cm}
+
+\bibliographystyle{apalike-fr}
+
+\newcommand{\mycolor}{MidnightBlue}
+\sectionfont{\color{\mycolor}}
+\subsectionfont{\color{\mycolor}}
+\subsubsectionfont{\color{\mycolor}}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    citecolor=\mycolor
+}
+
+\begin{document}
+
+\maketitle
+
+Notes personnelles d'un cours donné par le professeur Venkataraman Balakrishnan\\
+
+"Lecture Series on Quantum Physics by Prof.V.Balakrishnan, Department of Physics, IIT Madras Balakrishnan"
+
+\newpage
+\tableofcontents
+
+.
+
+\newpage
+\section{Espace vectoriel linéaire}
+\subsection{Définition}
+Si $\ket{\Psi},\ket{\Phi},\ket{\chi},...$ sont des éléments d'un espace vectoriel linéaire $\mathbb{V}$ nommés \textbf{vecteurs}. Ces vecteurs sont eux mêmes définit sur des \textbf{scalaires}, a,b,c... des éléments d'un \textbf{corps commutatif} $\mathbb{F}$. On considérera le corps des réels ou le corps des complexes $\mathbb{F}=\mathbb{R}$ ou $\mathbb{F}=\mathbb{C}$. Alors les éléments satisfont les axiomes suivants:\\
+
+Le résultat se l'addition de deux vecteurs est toujours inclus dans $\mathbb{V}$. De plus l'addition est associative :
+\[
+\ket{\Psi}+\ket{\Phi} \in \mathbb{V}
+\]
+\[
+(\ket{\Psi}+\ket{\Phi})+\ket{\chi}=\ket{\Psi}+(\ket{\Phi}+\ket{\chi})
+\]
+Le résultat de la la multiplication d'un vecteur par un scalaire est toujours inclus dans $\mathbb{V}$, et la multiplication par un scalaire est également distributive : 
+\[
+a\ket{\Psi} \in \mathbb{V}
+\]
+\[
+a(\ket{\Psi}+\ket{\Phi})=a\ket{\Psi}+a\ket{\Phi}
+\]
+Il existe un vecteur nul noté $\ket{0}$, un scalaire unitaire noté $1$ et un scalaire nul noté $0$ tel que:
+
+\[
+\ket{0}+\ket{\Psi}=\ket{\Psi}
+\]
+\[
+1\ket{\Psi}=\ket{\Psi}
+\]
+\[
+0\ket{\Psi}=\ket{0}
+\]
+
+\subsection{Exemples d'espaces vectoriels linéaires}
+
+Par exemple $\mathbb{R}$ est lui même un EV, $\mathbb{R}^2$ également et plus généralement $\mathbb{R}^n$ est un EV. Ces espaces satisfont en effet l'ensemble des propriétés énoncées précédemment, si on considère $\mathbb{F}=\mathbb{R}$ pour le corps commutatif.\\
+
+Par exemple $\mathbb{C}$ est lui même un EV, $\mathbb{C}^2$ également et plus généralement $\mathbb{C}^n$ est un EV. Ces espaces satisfont en effet l'ensemble des propriétés énoncées précédemment, si on considère $\mathbb{F}=\mathbb{C}$ pour le corps commutatif.\\
+
+L'ensemble des matrices carrées réelles ou complexes est un EV.\\
+
+L'ensemble des solutions de l'équation différentielle $\frac{d^2 x}{dt^2}+w^2 x=0$ est un EV. Il existe deux solutions élémentaires $e^{iwt}$ et $e^{-iwt}$ et toute combinaison linéaire est encore une solution de l'équation différentielle.
+
+\subsection{Construction d'un produit scalaire et existence d'un espace dual associé}
+\label{espace_dual}
+Considérons $\mathbb{V}$, un EV. Pour chaque couple de vecteurs $\ket{\Psi},\ket{\Phi}\in\mathbb{V}$ on \textbf{associe} un \textbf{scalaire} noté $\braket{\Psi|\Phi}$. Cette association doit être \textbf{bilinéaire}, c'est à dire qu'elle possède les propriétés suivantes:
+
+\[
+	\braket{\Psi|a\Phi}=a\braket{\Psi|\Phi}
+\]
+\[
+	\braket{\Psi|\Phi+\chi}=\braket{\Psi|\Phi}+\braket{\Psi|\chi}
+\]
+
+Pour un vecteur $\ket{\Psi}$ donné, les scalaires \{$\braket{\Psi|\Phi_1}$,$\braket{\Psi|\Phi_2}$,...\} ainsi obtenus par cette association forme un \textbf{vecteur dual} ou \textbf{vecteur adjoint} noté $\bra{\Psi}$. L'ensemble de ces vecteurs duaux, obtenus par les différents choix de $\Psi$ forme une autre espace noté $\tilde{\mathbb{V}}$ \textbf{l'espace dual associé} à $\mathbb{V}$.\\
+
+Il existe donc une manière systématique d'associer un autre espace vectoriel $\tilde{\mathbb{V}}$ à chaque espace vectoriel $\mathbb{V}$, de telle sorte que les espaces vectoriels viennent toujours par paires.\\
+
+\subsection{Construction d'une métrique}
+\label{metrique}
+On peut définir le produit scalaire d'un vecteur $\ket{\Psi}$ avec son dual $\bra{\Psi}$:
+
+\[
+\braket{\Psi|\Psi}
+\]
+
+Si on impose que le produit scalaire d'un vecteur $\ket{\Psi}$ son dual $\bra{\Psi}$ est nul si et seulement si le vecteur considéré est le vecteur nul :
+
+\[
+\boxed{\braket{\Psi|\Psi}=0 \quad Ssi\quad \ket{\Psi}=\ket{0}}
+\]
+
+On aimerait conserver cette propriété quelque soit l'espace considéré. De plus quelque soit l'espace considéré, on \textbf{définira la norme d'un vecteur} par la racine du produit scalaire \textbf{d'un vecteur avec son dual} on notera :
+
+\[
+\boxed{||\Psi||=\braket{\Psi|\Psi}^{\frac{1}{2}}}
+\]
+
+La norme ainsi définie sera \textbf{une métrique} si et seulement si cette norme possède les propriétés :\\
+
+L'inégalité triangulaire:
+\[
+\boxed{||\Psi+\Phi|| \le ||\Psi|| + ||\Phi||}
+\]
+
+L'inégalité de Cauchy-Schwarz
+\[
+\boxed{|| \braket{\Psi|\Phi} ||^2 \le \braket{\Psi|\Psi}\braket{\Phi|\Phi} }
+\]
+
+Ceci requiert également que la norme soit positive et finie.
+
+\[
+\boxed{0<||\Psi||<\infty\quad\quad\rightarrow\quad\quad 0<\braket{\Psi|\Psi}<\infty}
+\]
+
+\textbf{L'existence} d'une telle norme est nécessaire et cruciale dans de nombreux cas, pour pouvoir travailler avec l'espace considéré. Notamment avec les espaces de dimension infini on devra s'assurer de la convergence de la norme.
+
+
+\subsubsection{Exemples : $\mathbb{R}^n$ et $\mathbb{C}^n$}
+
+Pour $\mathbb{R}^n$, si on prend un \textbf{vecteur colonne} $\ket{\Psi}$, correspondant au "ket vecteur" et un \textbf{vecteur ligne} $\bra{\Phi}$ correspondant au "bra vecteur" alors il existe un moyen naturel de leurs \textbf{associer un scalaire avec une forme bilinéaire}, il s'agit de la \textbf{multiplication matricielle}:
+
+\[
+\ket{\Psi}=\begin{pmatrix}
+\Psi_1\\
+\Psi_2\\
+\Psi_3\\
+...\\
+\Psi_n\\
+\end{pmatrix}
+\quad\quad
+\bra{\Phi}=\begin{pmatrix}
+\Phi_1&
+\Phi_2&
+\Phi_3&
+...&
+\Phi_n\\
+\end{pmatrix}
+\quad\quad alors \quad\quad
+\braket{\Phi|\Psi}=\sum_i^{n}\Phi_i \Psi_i
+\]
+
+Et il est clair que cette association satisfait les propriétés de bilinéarités énoncées ( voir \ref{espace_dual} ). C'est à dire :
+
+\[
+	\braket{\Psi|a\Phi}=a\braket{\Psi|\Phi}
+\]
+\[
+	\braket{\Psi|\Phi+\chi}=\braket{\Psi|\Phi}+\braket{\Psi|\chi}
+\]
+
+Le  produit scalaire d'un vecteur avec son dual représente alors le carré de la norme du vecteur considéré:
+
+\[
+\ket{\Psi}\in\mathbb{R}^n \quad\rightarrow\quad \ket{\Psi}=\begin{pmatrix}
+\Psi_1\\
+\Psi_2\\
+\Psi_3\\
+...\\
+\Psi_n\\
+\end{pmatrix}
+\quad\quad
+\bra{\Psi}=\begin{pmatrix}
+\Psi_1&
+\Psi_2&
+\Psi_3&
+...&
+\Psi_n\\
+\end{pmatrix}
+\quad\rightarrow\quad
+\braket{\Psi|\Psi}=|\Psi|^2=\sum_i^{n}\Psi_i ^2
+\]
+
+Mais en fait on aurait très bien pu faire l'inverse et représenter $\mathbb{R}^n$ par l'ensemble des vecteurs lignes et construire son espace dual $\tilde{\mathbb{R}^n}$ par l'ensemble des vecteurs colonnes. (la multiplication aura alors un nouveau sens). Cela ne fait aucune différence et n'est affaire que de notation. On dira que le dual de $\mathbb{R}^n$ est encore $\mathbb{R}^n$. Autrement dit que $\mathbb{R}^n$ est \textbf{self dual}.\\
+
+Sur $\mathbb{C}^n$ on devra considérer que les vecteurs duaux associés sont les \textbf{conjugués et transposés} afin de conserver la propriété que la norme est nulle si est seulement si le vecteur considéré est le vecteur nul (\ref{metrique}) :
+
+\[
+\ket{\Psi}\in\mathbb{C}^n \quad\rightarrow\quad \ket{\Psi}=\begin{pmatrix}
+\Psi_1\\
+\Psi_2\\
+\Psi_3\\
+...\\
+\Psi_n\\
+\end{pmatrix}
+\quad\quad
+\bra{\Psi}=\begin{pmatrix}
+\Psi_1^*&
+\Psi_2^*&
+\Psi_3^*&
+...&
+\Psi_n^*\\
+\end{pmatrix}
+\quad\rightarrow\quad
+\braket{\Psi|\Psi}=|\Psi|^2=\sum_i^{n}\Psi_i^*\Psi_i=\sum_i^{n}|\Psi_i|^2
+\]
+
+L'espace dual sur les nombres complexes est alors formée en prenant les \textbf{conjugués transposés} ou \textbf{conjugués Hermitiens}. Il découle que \textbf{sur les espaces vectoriels complexes} ont a les propriétés suivantes : 
+
+\[
+	\boxed{a\ket{\Psi}=a^*\bra{\Psi}}
+\] 
+
+\[
+	\boxed{\braket{\Psi|\Phi}=\braket{\Phi|\Psi}^*}
+\] 
+
+\subsubsection{Exemple d'espace de dimension infinie dénombrable : $\mathbb{C}^\infty$}
+
+Lorsque la dimension de l'espace est infinie on doit assurer que la norme reste finie de manière à ce que les inégalités triangulaires et de Cauchy-Schwarz restent valides (voir \ref{metrique}). C'est à dire que :
+
+\[
+\braket{\Psi|\Psi}=|\Psi|^2=\sum_i^{\infty}\Psi_i^*\Psi_i=\sum_i^{\infty}|\Psi_i|^2 < \infty
+\] 
+
+On appellera \textbf{l'espace des séquences de carrés sommables} l'espace $\ell_2$.
+
+
+\newpage
+\section{Espaces vectoriels séparables (discrets)}
+
+\subsection{Indépendance linéaire}
+\label{li}
+Soit $\mathbb{V}$ un espace vectoriel. Et $\ket{\Phi_i}$, un ensemble discret de $n$ éléments de cet espace. Les éléments $\ket{\Phi_i}$ sont linéairement indépendant ssi l'équation suivante \textbf{n'a qu'une et une seule solution}: 
+
+\[
+\boxed{\sum_{i=0}^n C_i \ket{\Phi_i} =\ket{0} \quad\rightarrow\quad C_i=0}
+\]
+
+Si il existe une autre solution alors les vecteurs ne sont pas linéairement indépendant.
+
+\subsection{Couverture de l'espace et dimension de l'espace}
+\label{span}
+Soit $\mathbb{V}$ un espace vectoriel. Et $\ket{\Phi_i}$, un ensemble discret de $n$ éléments de cet espace. On dira que les vecteurs $\ket{\Phi_i}$ couvrent l'espace $\mathbb{V}$, ssi tout vecteur $\ket{\Psi}\in\mathbb{V}$ peut s'écrire comme une combinaison linéaire des vecteurs $\ket{\Phi_i}$. C'est à dire:
+
+\[
+\boxed{\ket{\Psi}=\sum_{i=0}^{n} C_i \ket{\Phi_i}}
+\]
+
+\textbf{La dimension de l'espace} $N=dim \mathbb{V}$ est \textbf{le plus petit $n$ nécessaire pour satisfaire cette propriété}. Dans le cas d'un espace de dimension infini, le nombre de dimensions peut être \textbf{dénombrable} ou \textbf{indénombrable}. Et on parlera respectivement \textbf{d'espaces vectoriels discrets} ou \textbf{d'espaces vectoriels continus}. Nous traiterons dans un premier temps des espaces vectoriels discret.
+
+\subsection{Base orthonormée complète}
+\label{base}
+Soit $\mathbb{V}$ un espace vectoriel. $\ket{\Phi_i}$ un ensemble de discret de $n$ éléments de cet espace. Si ils sont linéairement indépendants (voir \ref{li}) et qu'ils couvrent l'espace $\mathbb{V}$ (voir \ref{span}) , \textbf{alors ils forment une base} de cet espace.\\
+
+De plus cette \textbf{base est orthonormée} si est seulement si:
+
+\[
+\boxed{\braket{\Phi_i|\Phi_j}=\delta_{ij}}
+\]
+Et cette base \textbf{est complète} ssi :
+
+\[
+\boxed{\sum_i \ket{\Phi_i}\bra{\Phi_i}=\mathbbm{1}}
+\]
+
+Ou $\mathbbm{1}$ est l'opérateur identité.
+
+\subsection{Changement de base (lec4)}
+
+Supposons qu'il existe une autre base notons la $\ket{\chi_i}$, donc un vecteur $\ket{\Psi}$ possède un développement sur chacune des bases:
+
+\[
+\ket{\Psi}=\sum_{i=0}^{n} C_i \ket{\Phi_i} \quad et\quad \ket{\Psi}=\sum_{i=0}^{n} D_i \ket{\chi_i}
+\]
+
+Soit
+
+\[
+\braket{\Phi_j|\Psi}= C_j \quad et\quad \braket{\chi_k|\Psi}= D_k
+\]
+
+Mais on peut aussi étendre les membre de la base $\ket{\chi_k}$ sur la base des $\ket{\Phi_j}$ :
+
+\[
+\ket{\chi_k}=\sum_{j=0}^{n} H_{jk} \ket{\Phi_j} \quad et\quad H_{jk}=\braket{\Phi_j|\chi_k}
+\]
+
+
+Donc
+\[
+\ket{\Psi}=\sum_{i=0}^{n} D_i \ket{\chi_i}
+\]
+\[
+\ket{\Psi}=\sum_{i=0}^{n} D_i \sum_{j=0}^{n} \braket{\Phi_j|\chi_i} \ket{\Phi_j}
+\]
+
+\[
+\ket{\Psi}= \sum_{j=0}^{n} \left(\sum_{i=0}^{n} D_i\braket{\Phi_j|\chi_i}\right) \ket{\Phi_j}
+\]
+Donc on déduit que 
+\[
+\boxed{C_j=\sum_{i=0}^{n} D_i\braket{\Phi_j|\chi_i}}
+\]
+Mais en fait on aurait pu écrire que:
+\[
+C_j=\braket{\Phi_j|\Psi}
+\]
+Et insérer l'opérateur identité comme 
+\[
+C_j=\bra{\Phi_j} \mathbbm{1} \ket{\Psi}
+\]
+Par la relation de complétude:
+\[
+C_j=\bra{\Phi_j} \left(\sum_i \ket{\chi_i}\bra{\chi_i}\right) \ket{\Psi}
+\]
+Si on réarrange les termes
+\[
+C_j=\sum_i \braket{\chi_i|\Psi} \braket{\Phi_j|\chi_i}
+\]
+Soit finalement
+\[
+\boxed{C_j=\sum_i D_i \braket{\Phi_j|\chi_i}}
+\]
+\subsection{Conservation de la norme (Théorème de Parseval) }
+
+Etant donnée une base $\ket{\Phi_i}$ un vecteur $\ket{\Psi}$ possède un unique développement sur cette base:
+
+\[
+\ket{\Psi}=\sum_{i=0}^{n} C_i \ket{\Phi_i}
+\]
+
+Son dual s'exprime alors par:
+
+\[
+\bra{\Psi}=\sum_{j=0}^{n} C_j^* \bra{\Phi_j}
+\]
+
+Or on définit la norme au  carrée de ce vecteur par 
+
+\begin{eqnarray*}
+||\Psi||^2&=&\braket{\Psi|\Psi}\\
+&=&\sum_{j=0}^{n} C_j^* \bra{\Phi_j}\sum_{i=0}^{n} C_i \ket{\Phi_i}\\
+&=&\sum_{j=0}^{n}\sum_{i=0}^{n} C_j^* C_i \braket{\Phi_j|\Phi_i}\\
+&=&\sum_{j=0}^{n}\sum_{i=0}^{n} C_j^* C_i \delta{ji}\\
+&=&\sum_{i=0}^{n} C_i^* C_i \\
+&=&\sum_{i=0}^{n} |C_i|^2 \\
+\end{eqnarray*}
+
+Et donc finalement on obtient :
+
+\[
+\boxed{||\Psi||=\sqrt{\sum_{i=0}^{n} |C_i|^2}}
+\]
+
+La norme d'un vecteur est indépendante de la base choisie pour exprimer ses composantes.
+
+\subsection{Orthogonalisation de Gram-Schmidt (lec3)}
+
+\subsubsection{Principe}
+Soit $\ket{\chi_i}$ pour $i\in[1,N]$ \textbf{une base non orthonormée}, nous allons transformée cette base en \textbf{une base orthonormée} que nous noterons $\ket{\Phi_i}$.
+
+\[
+\boxed{ \ket{\Phi_i}= \frac{\ket{\tau_i}}{\left| \tau_i \right|}  \quad avec\quad \tau_i=\ket{\chi_i} - \sum_{j < i} \frac{\braket{\tau_j|\chi_i}}{\braket{\tau_j|\tau_j}} \ket{\tau_j} }
+\]
+
+\subsubsection{Exemple : Sur $\mathbb{R}^3$}
+
+Soit la base de $\mathbb{R}^3$ suivante :
+
+\[
+\ket{\chi_1}=\begin{pmatrix} 1\\1\\0 \end{pmatrix} \quad \ket{\chi_2}=\begin{pmatrix} 1\\0\\1 \end{pmatrix} \quad \ket{\chi_3}=\begin{pmatrix} 0\\1\\1 \end{pmatrix} 
+\]
+
+Cette base n'est pas orthonormée, en effet :
+
+\[
+\begin{array}{c}
+\braket{\chi_1|\chi_2}=\begin{pmatrix} 1&1&0 \end{pmatrix}\begin{pmatrix} 1\\0\\1 \end{pmatrix}=1\\
+\braket{\chi_1|\chi_3}=\begin{pmatrix} 1&1&0 \end{pmatrix}\begin{pmatrix} 0\\1\\1 \end{pmatrix}=1\\
+\braket{\chi_2|\chi_3}=\begin{pmatrix} 1&0&1 \end{pmatrix}\begin{pmatrix} 0\\1\\1 \end{pmatrix}=1\\
+\end{array}
+\]
+
+Si on applique l'algorithme de Gram-Schmidt, on obtient:
+
+\begin{eqnarray*}
+\ket{\tau_1}&=&\ket{\chi_1}=\begin{pmatrix} 1\\1\\0 \end{pmatrix}\\
+\ket{\tau_2}&=&\ket{\chi_2}-\frac{\braket{\tau_1|\chi_2}}{\braket{\tau_1|\tau_1}}\ket{\tau_1}=\begin{pmatrix} 1\\0\\1 \end{pmatrix}-\frac{1}{2}\begin{pmatrix} 1\\1\\0 \end{pmatrix}=\begin{pmatrix} 0.5\\-0.5\\1 \end{pmatrix}\\
+\ket{\tau_3}&=&\ket{\chi_3}-\frac{\braket{\tau_1|\chi_3}}{\braket{\tau_1|\tau_1}}\ket{\tau_1}-\frac{\braket{\tau_2|\chi_3}}{\braket{\tau_2|\tau_2}}\ket{\tau_2}=\begin{pmatrix} 0\\1\\1 \end{pmatrix}-\frac{1}{2}\begin{pmatrix} 1\\1\\0 \end{pmatrix}-\frac{1}{3}\begin{pmatrix} 0.5\\-0.5\\1 \end{pmatrix}=\frac{1}{3}\begin{pmatrix} -2\\2\\2 \end{pmatrix}
+\end{eqnarray*}
+
+D'où en normalisant, on obtient:
+
+\[
+\boxed{\ket{\Phi_1}= \frac{\ket{\tau_1}}{\left| \tau_1 \right|}=\frac{1}{\sqrt{2}}\begin{pmatrix} 1\\1\\0 \end{pmatrix} \quad \quad \ket{\Phi_2}= \frac{\ket{\tau_2}}{\left| \tau_2 \right|}=\frac{\sqrt{2}}{\sqrt{3}}\begin{pmatrix} 0.5\\-0.5\\1 \end{pmatrix} \quad \quad \ket{\Phi_3}= \frac{\ket{\tau_3}}{\left| \tau_3 \right|}=\frac{1}{2\sqrt{3}}\begin{pmatrix} -2\\2\\2 \end{pmatrix}}
+\]
+
+On obtient bien trois vecteurs orthogonaux et normés.
+
+\subsubsection{Exemple : Sur $\mathcal{L}^2(-1,1)$, Les polynômes de Legendre}
+
+Une base triviale pour les polynômes est la base des monômes :
+
+\[
+\ket{\chi_0}=1 \quad \ket{\chi_1}=x \quad \ket{\chi_2}=x^2 \quad ...\quad \ket{\chi_i}=x^{i}
+\]
+
+En effet tout polynôme $\ket{\Psi}$ peut alors se décomposer uniquement sur cette base :
+
+\[
+\ket{\Psi}=\sum_i C_i \ket{\chi_i}
+\]
+
+Si on définit le produit scalaire suivant: 
+\[
+\braket{\chi_i|\chi_j}= \int_{-1}^{1} \chi_i(x) \chi_j(x) dx
+\]
+
+Pour trouver une base orthonormée pour ce produit scalaire ainsi définit il suffit d'appliquer l'algorithme de Gram-Schmidt, notons tout d'abord que:
+
+\[
+\int_{-1}^{1}x^n=\frac{2}{n+1}\quad si\ n\ est\ pair\ 0\ sinon 
+\]
+
+Il s'en suit que les termes impaires sont nuls, et :
+
+\begin{eqnarray*}
+\ket{\tau_0}&=&\ket{\chi_0}=1\\
+\ket{\tau_1}&=&\ket{\chi_1}-\frac{\braket{\tau_0|\chi_1}}{\braket{\tau_0|\tau_0}}\ket{\tau_0}=x\\
+\ket{\tau_2}&=&\ket{\chi_2}-\frac{\braket{\tau_0|\chi_2}}{\braket{\tau_0|\tau_0}}\ket{\tau_0}-\frac{\braket{\tau_1|\chi_2}}{\braket{\tau_1|\tau_1}}\ket{\tau_1}=x^2-\frac{\int_{-1}^{1} x^2 dx }{\int_{-1}^{1} dx}=x^2-\frac{1}{3}\\
+\ket{\tau_3}&=&\ket{\chi_3}-\frac{\braket{\tau_0|\chi_3}}{\braket{\tau_0|\tau_0}}\ket{\tau_0}-\frac{\braket{\tau_1|\chi_3}}{\braket{\tau_1|\tau_1}}\ket{\tau_1}-\frac{\braket{\tau_2|\chi_3}}{\braket{\tau_2|\tau_2}}\ket{\tau_2}=x^3-\frac{\int_{-1}^{1} x^4 dx }{\int_{-1}^{1} x^2 dx}x=x^3-\frac{3}{5}x\\
+\ket{\tau_4}&=&\ket{\chi_4}-\frac{\braket{\tau_0|\chi_4}}{\braket{\tau_0|\tau_0}}\ket{\tau_0}-\frac{\braket{\tau_1|\chi_4}}{\braket{\tau_1|\tau_1}}\ket{\tau_1}-\frac{\braket{\tau_2|\chi_4}}{\braket{\tau_2|\tau_2}}\ket{\tau_2}-\frac{\braket{\tau_3|\chi_4}}{\braket{\tau_3|\tau_3}}\ket{\tau_3}=\\
+&=&x^4-\frac{\int_{-1}^{1} x^4 dx }{\int_{-1}^{1} dx}-\frac{\int_{-1}^{1} x^4(x^2-\frac{1}{3}) dx }{\int_{-1}^{1} (x^2-\frac{1}{3})(x^2-\frac{1}{3}) dx}(x^2-\frac{1}{3})\\
+&=&x^4-\frac{ 2/5 }{2}-\frac{16/105}{8/45}(x^2-\frac{1}{3})\\
+&=&x^4-\frac{ 1 }{5}-\frac{6}{7}(x^2-\frac{1}{3})\\
+&=&x^4-\frac{6}{7}x^2+\frac{3}{35}\\
+\ket{\tau_5}&=&...\\
+\end{eqnarray*}
+
+Et si on normalise, on obtient:
+
+
+\begin{eqnarray*}
+\ket{\Phi_0}&=& \frac{\ket{\tau_0}}{\left| \tau_0 \right|}=\frac{\ket{\tau_0}}{\sqrt{\braket{\tau_0 | \tau_0}}}=\frac{1}{\sqrt{\int_{-1}^{1} dx}}=\frac{1}{\sqrt{2}}\\
+\ket{\Phi_1}&=& \frac{\ket{\tau_1}}{\left| \tau_1 \right|}=\frac{\ket{\tau_1}}{\sqrt{\braket{\tau_1 | \tau_1}}}=\frac{x}{\sqrt{\int_{-1}^{1}x^2 dx}}=\frac{x}{\sqrt{\frac{2}{3}}}=\sqrt{\frac{3}{2}}x\\
+\ket{\Phi_2}&=& \frac{\ket{\tau_2}}{\left| \tau_2 \right|}=\frac{\ket{\tau_2}}{\sqrt{\braket{\tau_2 | \tau_2}}}=\frac{x^2-\frac{1}{3}}{\sqrt{\int_{-1}^{1}\left(x^2-\frac{1}{3}\right)^2 dx}}=\frac{x^2-\frac{1}{3}}{\sqrt{\frac{8}{45}}}=\frac{1}{4} \sqrt{10} (3 x^2 - 1)\\
+\ket{\Phi_3}&=& \frac{\ket{\tau_3}}{\left| \tau_3 \right|}=\frac{\ket{\tau_3}}{\sqrt{\braket{\tau_3 | \tau_3}}}=\frac{x^3-\frac{3}{5}x}{\sqrt{\int_{-1}^{1}\left(x^3-\frac{3}{5}x\right)^2 dx}}=\frac{x^3-\frac{3}{5}x}{\sqrt{\frac{8}{175}}}=\frac{1}{4} \sqrt{14} (5 x^2 - 3)x \\
+\ket{\Phi_4}&=& \frac{\ket{\tau_4}}{\left| \tau_4 \right|}=\frac{\ket{\tau_4}}{\sqrt{\braket{\tau_4 | \tau_4}}}=\frac{x^4-\frac{6}{7}x^2+\frac{3}{35}}{\sqrt{\int_{-1}^{1}\left(x^4-\frac{6}{7}x^2+\frac{3}{35}\right)^2 dx}}=\frac{x^4-\frac{6}{7}x^2+\frac{3}{35}}{\sqrt{\frac{128}{1125}}}=\frac{3}{16} \sqrt{2} (35 x^4 - 30 x^2 + 3)\\
+\ket{\Phi_5}&=&...\\
+\end{eqnarray*}
+
+Visuellement on obtient:
+
+\begin{center}
+\includegraphics[scale=0.8]{./Legendre_polynomes_norm.png}
+\end{center}
+
+On obtient ainsi les \textbf{polynômes de Legendre normés}, mais généralement on utilise une autre convention qui consiste à imposer :
+
+\[
+P_n(1)=1
+\]
+
+
+
+\subsubsection{Exemple : Les polynômes de Hermite}
+
+Une base triviale pour les polynômes est la base des monômes :
+
+\[
+\ket{\chi_0}=1 \quad \ket{\chi_1}=x \quad \ket{\chi_2}=x^2 \quad ...\quad \ket{\chi_i}=x^{i}
+\]
+
+En effet tout polynôme $\ket{\Psi}$ peut alors se décomposer uniquement sur cette base :
+
+\[
+\ket{\Psi}=\sum_i C_i \ket{\chi_i}
+\]
+
+Si on définit le produit scalaire suivant: 
+\[
+\braket{\chi_i|\chi_j}= \int_{-\infty}^{\infty} \chi_i(x) \chi_j(x) e^{-x^2} dx
+\]
+
+Pour trouver une base orthonormée pour ce produit scalaire ainsi définit il suffit d'appliquer l'algorithme de Gram-Schmidt, notons tout d'abord que:
+
+\[
+\int_{-\infty}^{\infty}x^n e^{-x^2}= \frac{1}{2} ((-1)^n + 1) \Gamma\left(\frac{n + 1}{2}\right)
+\]
+
+Donc 
+
+\[
+\left\{
+\begin{array}{l}
+\int_{-\infty}^{\infty}x^{2n+1} e^{-x^2}=0\\
+\\
+\int_{-\infty}^{\infty}x^{2n} e^{-x^2}=\Gamma\left(n+\frac{1}{2}\right)=\frac{(2n)!}{2^{2n}n!}\sqrt{\pi}\\
+\end{array}
+\right.
+\]
+
+Il s'en suit que les termes impaires sont nuls, et :
+
+\begin{eqnarray*}
+\ket{\tau_0}&=&\ket{\chi_0}=1\\
+\ket{\tau_1}&=&\ket{\chi_1}-\frac{\braket{\tau_0|\chi_1}}{\braket{\tau_0|\tau_0}}\ket{\tau_0}=x-\frac{\int_{-\infty}^{\infty}x e^{-x^2}}{\int_{-\infty}^{\infty} e^{-x^2}}=x\\
+\ket{\tau_2}&=&\ket{\chi_2}-\frac{\braket{\tau_0|\chi_2}}{\braket{\tau_0|\tau_0}}\ket{\tau_0}-\frac{\braket{\tau_1|\chi_2}}{\braket{\tau_1|\tau_1}}\ket{\tau_1}=x^2-\frac{\int_{-\infty}^{\infty}x^2 e^{-x^2}}{\int_{-\infty}^{\infty}e^{-x^2}}=x^2-\frac{1}{2}\\
+\ket{\tau_3}&=&\ket{\chi_3}-\frac{\braket{\tau_0|\chi_3}}{\braket{\tau_0|\tau_0}}\ket{\tau_0}-\frac{\braket{\tau_1|\chi_3}}{\braket{\tau_1|\tau_1}}\ket{\tau_1}-\frac{\braket{\tau_2|\chi_3}}{\braket{\tau_2|\tau_2}}\ket{\tau_2}=x^3-\frac{\int_{-\infty}^{\infty}x^4 e^{-x^2}}{\int_{-\infty}^{\infty}x^2 e^{-x^2}}x=x^3-\frac{3}{2}x\\
+\ket{\tau_4}&=&\ket{\chi_4}-\frac{\braket{\tau_0|\chi_4}}{\braket{\tau_0|\tau_0}}\ket{\tau_0}-\frac{\braket{\tau_1|\chi_4}}{\braket{\tau_1|\tau_1}}\ket{\tau_1}-\frac{\braket{\tau_2|\chi_4}}{\braket{\tau_2|\tau_2}}\ket{\tau_2}-\frac{\braket{\tau_3|\chi_4}}{\braket{\tau_3|\tau_3}}\ket{\tau_3}\\
+&=&\ket{\chi_4}-\frac{\braket{\tau_0|\chi_4}}{\braket{\tau_0|\tau_0}}\ket{\tau_0}-\frac{\braket{\tau_2|\chi_4}}{\braket{\tau_2|\tau_2}}\ket{\tau_2}\\
+&=&x^4-\frac{\int_{-\infty}^{\infty}x^4 e^{-x^2}}{\int_{-\infty}^{\infty}e^{-x^2}}-\frac{\int_{-\infty}^{\infty} \left(x^2-\frac{1}{2}\right)x^4 e^{-x^2}}{\int_{-\infty}^{\infty}\left(x^2-\frac{1}{2}\right)^2 e^{-x^2}}(x^2-\frac{1}{2})\\
+&=&x^4-\frac{3}{4}-\frac{3\sqrt{\pi}}{2}\frac{2}{\sqrt{\pi}}(x^2-\frac{1}{2})\\
+&=&x^4-3x^2+\frac{3}{4}\\
+\ket{\tau_5}&=&...\\
+\end{eqnarray*}
+
+Et si on normalise, on obtient:
+
+\begin{eqnarray*}
+\ket{\Phi_0}&=& \frac{\ket{\tau_0}}{\left| \tau_0 \right|}=\frac{1}{\sqrt{\braket{\tau_0 | \tau_0}}}=\frac{1}{\sqrt[4]{\pi}}\\
+\ket{\Phi_1}&=& \frac{\ket{\tau_1}}{\left| \tau_1 \right|}=\frac{x}{\sqrt{\braket{\tau_1 | \tau_1}}}=\frac{\sqrt{2}}{\sqrt[4]{\pi}}x\\
+\ket{\Phi_2}&=& \frac{\ket{\tau_2}}{\left| \tau_2 \right|}=\frac{\sqrt{2}}{\sqrt[4]{\pi}}\left(x^2-\frac{1}{2}\right)\\
+\ket{\Phi_3}&=& \frac{\ket{\tau_3}}{\left| \tau_3 \right|}=\frac{2}{\sqrt{3}\sqrt[4]{\pi}}\left(x^3-\frac{3}{2}x \right)\\
+\ket{\Phi_4}&=& \frac{\ket{\tau_4}}{\left| \tau_4 \right|}=\frac{\sqrt{2}}{\sqrt{3\sqrt{\pi}}}\left( x^4-3x^2+\frac{3}{4}\right)\\
+\ket{\Phi_3}&=...\\
+\end{eqnarray*}
+
+\subsection{Projecteurs}
+
+\subsubsection{Définition}
+On définit l'opérateur de projection sur $\ket{\Phi}$ un vecteur d'une base orthonormée complète, par:
+
+\[
+\boxed{ P=\ket{\Phi}\bra{\Phi} }
+\]
+
+Si on possède une base de vecteur $\ket{\Phi_i}$, tout vecteur $\ket{\Psi}$ peut se décomposer dans la base par:
+
+\[
+\ket{\Psi}=\sum_{i=0}^{n} C_i \ket{\Phi_i}
+\]
+
+Si la base est orthonormée alors:
+
+\[
+\boxed{C_j= \braket{\Phi_j|\Psi}}
+\]
+
+En effet par orthogonalité $\braket{\Phi_i|\Phi_j}=\delta_{ij}$ (voir \ref{base}):
+
+\begin{eqnarray*}
+\braket{\Phi_j|\Psi}&=&\bra{\Phi_j} \sum_{i=0}^{n} C_i \ket{\Phi_i}\\
+&=& \sum_{i=0}^{n} C_i \braket{\Phi_j|\Phi_i}\\
+&=& \sum_{i=0}^{n} C_i \delta_{ij}\\
+&=& C_j\\
+\end{eqnarray*}
+
+En effet si la base est complete alors $\sum_i \ket{\Phi_i}\bra{\Phi_i}=\mathbbm{1}$ (voir \ref{base}), et on obtient bien:
+
+\begin{eqnarray*}
+\ket{\Psi}&=&\sum_{i=0}^{n} C_i \ket{\Phi_i}\\
+&=&\sum_{i=0}^{n} \braket{\Phi_i|\Psi} \ket{\Phi_i}\\
+&=&\sum_{i=0}^{n} \ket{\Phi_i}\bra{\Phi_i}\ket{\Psi} \\
+&=&\mathbbm{1}\ket{\Psi} \\
+\end{eqnarray*}
+
+Cette ligne :
+
+\[
+\boxed{\ket{\Psi}=\sum_{i=0}^{n} \ket{\Phi_i}\bra{\Phi_i}\ket{\Psi}}
+\]
+
+Nous enseigne que \textbf{la somme de toutes les projections sur les vecteurs de la base $\ket{\Phi_i}$ reproduit bien le vecteur $\ket{\Psi}$}.\\
+
+\subsubsection{Note sur les valeurs propres d'un opérateur de projection}
+Aussi on a également:
+
+\[
+\boxed{P^n=P}
+\]
+
+En effet en utilisant l'orthonormalité de la base:
+
+\[
+P^2=\ket{\Phi}\bra{\Phi}\ket{\Phi}\bra{\Phi}=\ket{\Phi}\bra{\Phi}=P
+\]
+
+Il s'en suit alors que :
+
+\begin{eqnarray*}
+P^2-P&=&0\\
+P(P-\mathbbm{1})&=&0\\
+\end{eqnarray*}
+
+Ce qui implique que si $P$ est une matrice ces valeurs propres sont soit 0 soit 1.
+
+\subsubsection{Base pour les opérateurs}
+\label{base_op}
+\textbf{L'ensemble des projecteurs $\ket{\Phi_i}\bra{\Phi_j}$ forme une base pour les opérateurs}, cette base est de dimension $N^2$ pour $N$ est la dimension de l'espace considéré. Ainsi un opérateur $A$ peut se décomposer sur la base des projecteurs:
+
+\[
+\boxed{A=\sum_i \sum_j a_{ij}\ket{\Phi_i}\bra{\Phi_j}}
+\]
+
+Les "\textbf{éléments matriciels}" (même s'il ne s'agit pas de matrices) s'expriment alors par:
+
+\[
+\boxed{a_{ij}=\bra{\Phi_i}A\ket{\Phi_j}}
+\]
+
+\subsubsection{Exemple : $\mathbb{R}^2$ }
+
+Prenons un exemple sur $\mathbb{R}^2$, les vecteurs d'une base orthonormée s'exprime par:
+
+\[
+\ket{\Phi_1}=\begin{pmatrix}
+1\\
+0\\
+\end{pmatrix}
+\quad et\quad
+\ket{\Phi_2}=\begin{pmatrix}
+0\\
+1\\
+\end{pmatrix}
+\]
+
+Il est alors immédiatement clair que l'orthonormalité est vérifiée, c'est à dire que:
+
+\[
+\braket{\Phi_i|\Phi_j}=\delta_{ij}
+\]
+
+Regardons les projecteurs:
+\[
+\ket{\Phi_1}\bra{\Phi_1}=\begin{pmatrix}
+1\\
+0\\
+\end{pmatrix}
+\begin{pmatrix}
+1&0\\
+\end{pmatrix}
+=
+\begin{pmatrix}
+1&0\\
+0&0\\
+\end{pmatrix}
+\]
+Et
+\[
+\ket{\Phi_2}\bra{\Phi_2}=\begin{pmatrix}
+0\\
+1\\
+\end{pmatrix}
+\begin{pmatrix}
+0&1\\
+\end{pmatrix}
+=
+\begin{pmatrix}
+0&0\\
+0&1\\
+\end{pmatrix}
+\]
+On à également les deux projecteurs
+\[
+\ket{\Phi_1}\bra{\Phi_2}=\begin{pmatrix}
+1\\
+0\\
+\end{pmatrix}
+\begin{pmatrix}
+0&1\\
+\end{pmatrix}
+=
+\begin{pmatrix}
+0&1\\
+0&0\\
+\end{pmatrix}
+\]
+Et 
+\[
+\ket{\Phi_2}\bra{\Phi_1}=\begin{pmatrix}
+0\\
+1\\
+\end{pmatrix}
+\begin{pmatrix}
+1&0\\
+\end{pmatrix}
+=
+\begin{pmatrix}
+0&0\\
+1&0\\
+\end{pmatrix}
+\]
+
+On obtient bien la relation de complétude, en effet si on sommes les projecteurs on obtient bien l'opérateur identité $\mathbbm{1}$ qui sur $\mathbb{R}^2$ est la matrice identité :
+
+\[
+\boxed{\sum_i^2 \ket{\Phi_i}\bra{\Phi_i}=\begin{pmatrix}
+1&0\\
+0&0\\
+\end{pmatrix}+\begin{pmatrix}
+0&0\\
+0&1\\
+\end{pmatrix}=\begin{pmatrix}
+1&0\\
+0&1\\
+\end{pmatrix}=\mathbbm{1}}
+\]
+
+Et tout opérateur de $\mathbb{R}^2$ c'est à dire une matrice (2,2) peut se décomposer comme (voir \ref{base_op}) :
+
+\[
+A=\sum_i \sum_j a_{ij}\ket{\Phi_1}\bra{\Phi_j}
+\]
+
+\[
+\begin{pmatrix}
+a_{11}&a_{12}\\
+a_{21}&a_{22}\\
+\end{pmatrix}=a_{11}\ket{\Phi_1}\bra{\Phi_1}+a_{12}\ket{\Phi_1}\bra{\Phi_2}+a_{21}\ket{\Phi_2}\bra{\Phi_1}+a_{22}\ket{\Phi_2}\bra{\Phi_2}
+\]
+
+\[
+\boxed{\begin{pmatrix}
+a_{11}&a_{12}\\
+a_{21}&a_{22}\\
+\end{pmatrix}=a_{11}\begin{pmatrix}
+1&0\\
+0&0\\
+\end{pmatrix}+a_{12}\begin{pmatrix}
+0&1\\
+0&0\\
+\end{pmatrix}+a_{21}\begin{pmatrix}
+0&0\\
+1&0\\
+\end{pmatrix}+a_{22}\begin{pmatrix}
+0&0\\
+0&1\\
+\end{pmatrix}}
+\]
+
+De plus on peut extraire les éléments par la relation :
+\[
+a_{ij}=\bra{\Phi_i}A\ket{\Phi_j}
+\]
+
+\[
+a_{11}=\bra{\Phi_1}A\ket{\Phi_1}=\begin{pmatrix}
+1&0\\
+\end{pmatrix}\begin{pmatrix}
+a_{11}&a_{12}\\
+a_{21}&a_{22}\\
+\end{pmatrix}\begin{pmatrix}
+1\\
+0\\
+\end{pmatrix}=\begin{pmatrix}
+a_{11}&a_{12}\\
+\end{pmatrix}\begin{pmatrix}
+1\\
+0\\
+\end{pmatrix}=a_{11}
+\]
+
+\newpage
+\section{Espaces vectoriels non-séparables (continus)}
+
+\end{document}
