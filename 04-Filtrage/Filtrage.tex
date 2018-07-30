@@ -1,0 +1,162 @@
+%\documentclass[draft]{article}
+\documentclass{article}
+
+\usepackage{color}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{amsfonts}
+
+\providecommand{\floor}[1]{\left \lfloor #1 \right \rfloor }
+\providecommand{\ceil}[1]{\left \lceil #1 \right \rceil }
+
+\geometry{hmargin=1.5cm,vmargin=1.5cm}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+}
+
+\newcommand{\workon}{\color{Blue}{(en cours)}}
+\newcommand{\verif}{\color{Orange}{(à vérifier)}}
+\newcommand{\todo}{\color{PineGreen}{(à faire)}}
+
+\title{\textbf{Conception de filtres numériques}\\Recueil de méthodes}
+\author{Loïc Huguel}
+
+\setlength{\parindent}{0cm}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+\section{Filtres à réponse impulsionnelle finie : RIF}
+
+\subsection{Définition}
+
+On définit un filtre à réponse finie par ses coefficients $h_n$ avec $n\in[0:N-1]$, dans le domaine temporel, on obtient le signal filtré $\bar{S}(k)$ par convolution :
+
+\[
+	\boxed{\bar{S}(k)=\sum_{n=0}^{N-1} h_n S(k-n)}
+\]
+
+Alors la réponse fréquentielle du filtre peut être calculée comme:
+\[
+\boxed{A(w)=\sum_{n=0}^M a_n cos(w n)}
+\]
+
+\[
+	a_0=h_M \quad a_n=2 h_{M-n} \quad et \quad M=\frac{N-1}{2}
+\]
+
+\subsection{Conception par les moindres carrés}
+On définit le critère d'erreur $\epsilon$ par :
+\[
+\epsilon=\int_0^\pi W(w)(A(w)-D(w))^2 dw
+\]
+
+Ou 
+
+\begin{center}
+\begin{tabular}{cl}
+$W(w)$&Est une fonction de pondération non négative\\
+$A(w)$&Est l'amplitude actuelle\\
+$D(w)$&Est l'amplitude désirée. C'est à dire le gabarit du filtre\\
+\end{tabular}
+\end{center}
+
+On doit donc trouver les coefficients $a_n$ tel que $\epsilon$ soit minimal, c'est à dire que:
+
+\[
+	\frac{\partial \epsilon}{\partial  a_k}=0
+\]
+
+Calculons les dérivées:
+
+\[
+\frac{\partial \epsilon}{\partial a_k}=\int_0^\pi \frac{\partial \left( W(w)(A(w)-D(w))^2 \right)}{\partial a_k}  dw
+\]
+
+Comme $(g(u))'=u'g'(u)$ et que seul $A(w)$ dépend de $a_k$:
+
+\[
+\frac{\partial \epsilon}{\partial a_k}=2\int_0^\pi \frac{\partial A(w)}{\partial a_k} W(w)(A(w)-D(w))   dw
+\]
+
+Et de plus $\frac{\partial A(w)}{\partial a_k}=cos(w k)$, donc finalement 
+
+\[
+\frac{\partial \epsilon}{\partial a_k}=2\int_0^\pi cos(w k) W(w)(A(w)-D(w))   dw
+\]
+
+Si on résout :
+
+\[
+2\int_0^\pi cos(w k) W(w)(A(w)-D(w))   dw=0
+\]
+\[
+\int_0^\pi cos(w k) W(w) A(w)   dw=\int_0^\pi cos(w k) W(w) D(w)   dw
+\]
+
+Mais $A(w)=\sum_{n=0}^M a_n cos(w n)$, donc :
+
+\[
+\int_0^\pi cos(w k) W(w) \left(\sum_{n=0}^M a_n cos(w n)\right)   dw=\int_0^\pi cos(w k) W(w) D(w)   dw
+\]
+
+\[
+\sum_{n=0}^M a_n \int_0^\pi  W(w) cos(w k) cos(w n)  dw=\int_0^\pi  W(w) D(w) cos(w k)  dw
+\]
+
+Si on définit 
+\[
+\boxed{Q(k,n)=\int_0^\pi  W(w) cos(w k) cos(w n)  dw}
+\]
+Et 
+\[
+\boxed{B(k)=\int_0^\pi  W(w) D(w) cos(w k)  dw}
+\]
+Et 
+\[
+\boxed{A(n)=a_n}
+\]
+
+Alors on peut écrire le système linéaire:
+\[
+Q \cdot A= B 
+\]
+
+On peut alors résoudre par SVD par exemple: $A=Q^+B$, il nous reste à préciser comment calculer les intégrales de $Q$ et $B$. Comme on à l'identité:
+
+\[
+cos(w k) cos(w n) = \frac{cos(w (k-n))+cos(w (k+n))}{2}
+\]
+
+Il s'en suit que:
+\[
+Q(k,n)=\int_0^\pi  W(w) \frac{cos(w (k-n))+cos(w (k+n))}{2}  dw
+\]
+\[
+Q(k,n)=\frac{1}{2}\int_0^\pi  W(w) cos(w (k-n)) dw + \frac{1}{2}\int_0^\pi  W(w) cos(w (k+n))  dw
+\]
+
+Finalement
+\[
+\boxed{\left\{
+\begin{array}{l}
+Q(k,n)=\frac{1}{2}Q_1(k,n)+\frac{1}{2}Q_2(k,n)\\
+Q_1(k,n)=q(k-n)\\
+Q_2(k,n)=q(k+n)\\
+q(k)= \frac{1}{2}\int_0^\pi  W(w) cos(w k) dw
+\end{array}
+\right.}
+\]
+
+
+\end{document}
