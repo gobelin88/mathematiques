@@ -361,3 +361,51 @@ cplx T_sqrt(cplx z,int it)
 
     return sum;
 }
+
+//--------------------------------------------------------------------
+//f=erf(z)
+cplx T_erf(cplx z,int it)
+{
+    cplx sum=0.0;
+    unsigned int n=0;
+    do
+    {
+        sum+=nb_minus_one_power_n(n)*func_pow(z,2*n+1)/(nb_factorial(n)*(2*n+1));//func_pow(2,2*n)*nb_bernoulli(2*n)/nb_factorial(2*n)*;
+        n++;
+    }
+    while((int)n<it);
+
+    return sum/z*2.0/sqrt(M_PI);
+}
+
+//--------------------------------------------------------------------
+//f=C(z)
+cplx T_C(cplx z,int it)
+{
+    cplx sum=0.0;
+    unsigned int n=0;
+    do
+    {
+        sum+=nb_minus_one_power_n(n)*func_pow(z,4*n+1)/(nb_factorial(2*n)*(4*n+1));//func_pow(2,2*n)*nb_bernoulli(2*n)/nb_factorial(2*n)*;
+        n++;
+    }
+    while((int)n<it);
+
+    return sum/z;
+}
+
+//--------------------------------------------------------------------
+//f=S(z)
+cplx T_S(cplx z,int it)
+{
+    cplx sum=0.0;
+    unsigned int n=0;
+    do
+    {
+        sum+=nb_minus_one_power_n(n)*func_pow(z,4*n+3)/(nb_factorial(2*n+1)*(4*n+3));//func_pow(2,2*n)*nb_bernoulli(2*n)/nb_factorial(2*n)*;
+        n++;
+    }
+    while((int)n<it);
+
+    return sum/z;
+}

@@ -5,7 +5,6 @@
 #include "typedef.h"
 #include "benchmarks.h"
 #include "fractals.h"
-#include "cloud.h"
 
 void plot_fractals(Resolution res)
 {
@@ -89,54 +88,54 @@ void plot_all(Resolution res,ColorMode mode)
 {
     double N=10;
 
-    //1 Similitude
-    for(int i=0;i<=N;++i)
-    {
-        double theta=(2.0*M_PI*i)/N;//0 à 2*pi
-        double t=(i-5)*2/N;         //-1 à 1
-        double k=(i+1)*0.2;            //1/5 à 11/5
+//    //1 Similitude
+//    for(int i=0;i<=N;++i)
+//    {
+//        double theta=(2.0*M_PI*i)/N;//0 à 2*pi
+//        double t=(i-5)*2/N;         //-1 à 1
+//        double k=(i+1)*0.2;            //1/5 à 11/5
 
-        plot_riemann(QString("./plots/spheres/mobius/1_similitude_rotation_sphere%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,exp(I*theta/2.0),0,0,exp(-I*theta/2.0));},res,M_PI/4,M_PI/4,mode);
-        plot_img(QString("./plots/spheres/mobius/1_similitude_rotation_plan%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,exp(I*theta/2.0),0,0,exp(-I*theta/2.0));},res,-2,-2,2,2,mode);
-        plot_riemann(QString("./plots/spheres/mobius/1_similitude_translation_sphere%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,1,t,0,1);},res,M_PI/4,M_PI/4,mode);
-        plot_img(QString("./plots/spheres/mobius/1_similitude_translation_plan%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,1,t,0,1);},res,-2,-2,2,2,mode);
-        plot_riemann(QString("./plots/spheres/mobius/1_similitude_homothetie_sphere%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,k,0,0,1/k);},res,M_PI/4,M_PI/4,mode);
-        plot_img(QString("./plots/spheres/mobius/1_similitude_homothetie_plan%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,k,0,0,1/k);},res,-2,-2,2,2,mode);
-        plot_riemann(QString("./plots/spheres/mobius/1_similitude_sphere%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,k*exp(I*theta/2.0),t/k*exp(-I*theta/2.0),0,1/k*exp(-I*theta/2.0));},res,M_PI/4,M_PI/4,mode);
-        plot_img(QString("./plots/spheres/mobius/1_similitude_plan%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,k*exp(I*theta/2.0),t/k*exp(-I*theta/2.0),0,1/k*exp(-I*theta/2.0));},res,-2,-2,2,2,mode);
-    }
+//        plot_riemann(QString("./plots/spheres/mobius/1_similitude_rotation_sphere%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,exp(I*theta/2.0),0,0,exp(-I*theta/2.0));},res,M_PI/4,M_PI/4,mode);
+//        plot_img(QString("./plots/spheres/mobius/1_similitude_rotation_plan%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,exp(I*theta/2.0),0,0,exp(-I*theta/2.0));},res,-2,-2,2,2,mode);
+//        plot_riemann(QString("./plots/spheres/mobius/1_similitude_translation_sphere%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,1,t,0,1);},res,M_PI/4,M_PI/4,mode);
+//        plot_img(QString("./plots/spheres/mobius/1_similitude_translation_plan%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,1,t,0,1);},res,-2,-2,2,2,mode);
+//        plot_riemann(QString("./plots/spheres/mobius/1_similitude_homothetie_sphere%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,k,0,0,1/k);},res,M_PI/4,M_PI/4,mode);
+//        plot_img(QString("./plots/spheres/mobius/1_similitude_homothetie_plan%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,k,0,0,1/k);},res,-2,-2,2,2,mode);
+//        plot_riemann(QString("./plots/spheres/mobius/1_similitude_sphere%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,k*exp(I*theta/2.0),t/k*exp(-I*theta/2.0),0,1/k*exp(-I*theta/2.0));},res,M_PI/4,M_PI/4,mode);
+//        plot_img(QString("./plots/spheres/mobius/1_similitude_plan%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobius(z,k*exp(I*theta/2.0),t/k*exp(-I*theta/2.0),0,1/k*exp(-I*theta/2.0));},res,-2,-2,2,2,mode);
+//    }
 
-    //2 Transformation Inverse
-    plot_img("./plots/spheres/mobius/2_inverse_plan.png",[](cplx z)->cplx{return t_mobiusn(z,-1,1,-1,1);},res,  -2,-2,2,2,mode);
-    plot_img("./plots/spheres/mobius/2_inverse_flux_plan.png",[](cplx z)->cplx{return z-t_mobiusn(z,-1,1,-1,1);},res,  -2,-2,2,2,mode);
-    for(int i=0;i<=N;++i)
-    {
-        double t=(2.0*M_PI*i)/N;
-        plot_riemann(QString("./plots/spheres/mobius/2_inverse_sphere%1.png").arg(i) ,[](cplx z)->cplx{return t_mobiusn(z,-1,1,-1,1);},res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/mobius/2_inverse_flux_sphere%1.png").arg(i) ,[](cplx z)->cplx{return z-t_mobiusn(z,-1,1,-1,1);},res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/mobius/2_inverse_it_sphere%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobiusn(z,-1,1,-1,(i+0.0001)/N*2);},res,M_PI/4,M_PI/4,mode);
-    }
+//    //2 Transformation Inverse
+//    plot_img("./plots/spheres/mobius/2_inverse_plan.png",[](cplx z)->cplx{return t_mobiusn(z,-1,1,-1,1);},res,  -2,-2,2,2,mode);
+//    plot_img("./plots/spheres/mobius/2_inverse_flux_plan.png",[](cplx z)->cplx{return z-t_mobiusn(z,-1,1,-1,1);},res,  -2,-2,2,2,mode);
+//    for(int i=0;i<=N;++i)
+//    {
+//        double t=(2.0*M_PI*i)/N;
+//        plot_riemann(QString("./plots/spheres/mobius/2_inverse_sphere%1.png").arg(i) ,[](cplx z)->cplx{return t_mobiusn(z,-1,1,-1,1);},res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/mobius/2_inverse_flux_sphere%1.png").arg(i) ,[](cplx z)->cplx{return z-t_mobiusn(z,-1,1,-1,1);},res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/mobius/2_inverse_it_sphere%1.png").arg(i) ,[=](cplx z)->cplx{return t_mobiusn(z,-1,1,-1,(i+0.0001)/N*2);},res,M_PI/4,M_PI/4,mode);
+//    }
 
-    return;
+//    return;
 
-    //Fonctions Spheres
-    for(int i=0;i<N;++i)
-    {
-        double t=(2.0*M_PI*i)/N;
+//    //Fonctions Spheres
+//    for(int i=0;i<N;++i)
+//    {
+//        double t=(2.0*M_PI*i)/N;
 
-        plot_riemann(QString("./plots/spheres/func/f_xi_hat_sphere%1.png").arg(i) ,[](cplx z)->cplx{return f_xi_hat(z,200);},res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/func/f_gamma_sphere%1.png").arg(i) ,[](cplx z)->cplx{return f_gamma(z,200);},res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/func/f_digamma_sphere%1.png").arg(i) ,[](cplx z)->cplx{return f_digamma(z,200);},res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/func/zeta_form3_sphere%1.png").arg(i) ,[](cplx z)->cplx{return f_zeta_form3(z,200);},res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/func/func_exp_sphere%1.png").arg(i) ,func_exp,res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/func/func_cos_sphere%1.png").arg(i) ,func_cos,res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/func/func_sin_sphere%1.png").arg(i) ,func_sin,res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/func/func_tan_sphere%1.png").arg(i) ,func_tan,res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/func/func_cosh_sphere%1.png").arg(i) ,func_cosh,res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/func/func_sinh_sphere%1.png").arg(i) ,func_sinh,res,M_PI/4,t,mode);
-        plot_riemann(QString("./plots/spheres/func/func_tanh_sphere%1.png").arg(i) ,func_tanh,res,M_PI/4,t,mode);
-    }
-    return;
+//        plot_riemann(QString("./plots/spheres/func/f_xi_hat_sphere%1.png").arg(i) ,[](cplx z)->cplx{return f_xi_hat(z,200);},res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/func/f_gamma_sphere%1.png").arg(i) ,[](cplx z)->cplx{return f_gamma(z,200);},res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/func/f_digamma_sphere%1.png").arg(i) ,[](cplx z)->cplx{return f_digamma(z,200);},res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/func/zeta_form3_sphere%1.png").arg(i) ,[](cplx z)->cplx{return f_zeta_form3(z,200);},res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/func/func_exp_sphere%1.png").arg(i) ,func_exp,res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/func/func_cos_sphere%1.png").arg(i) ,func_cos,res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/func/func_sin_sphere%1.png").arg(i) ,func_sin,res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/func/func_tan_sphere%1.png").arg(i) ,func_tan,res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/func/func_cosh_sphere%1.png").arg(i) ,func_cosh,res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/func/func_sinh_sphere%1.png").arg(i) ,func_sinh,res,M_PI/4,t,mode);
+//        plot_riemann(QString("./plots/spheres/func/func_tanh_sphere%1.png").arg(i) ,func_tanh,res,M_PI/4,t,mode);
+//    }
+//    return;
 
     //TESTS ---------------------------------------------------------------------
     plot_img("./plots/test_mod_only.png",[](cplx z)->cplx{return z;},res,  -10,-10,10,10,MODE_MOD_ONLY);
@@ -219,6 +218,8 @@ void plot_all(Resolution res,ColorMode mode)
     plot_img_it("./plots/lnT_%1.png"            ,T_ln           ,res,2,64,-2,-2,2,2,mode);
     plot_img_it("./plots/bernoulliT_%1.png"     ,T_bernoulli    ,res,2,64,-10,-10,10,10,mode);
     plot_img_it("./plots/sqrtT_%1.png"          ,T_sqrt         ,res,2,64,-2,-2,2,2,mode);
+
+
 
     //MISC
     plot_img_it("./plots/TT_geomertic_ac_%1.png",TT_geomertic_ac,res,40,40,-2,-2,2,2,mode);
@@ -306,13 +307,6 @@ void plotRiemannSurfaceLog(double R,double dr,double dt,int n,const char * filen
 
 int main(int argc, char *argv[])
 {
-    Cloud cloud("pave.csv");
-    cloud.save("pave2.csv");
-
-    //////////////////////////////////////////////
-    ///
-    return 0;
-
     Q_UNUSED(argc);
     Q_UNUSED(argv);
 
@@ -329,7 +323,12 @@ int main(int argc, char *argv[])
     //bench_TL_functions();
 
     //plot_nt();
-    plot_all(Resolution(1024),MODE_ARG_AND_MOD_ISO);
+
+    plot_img_it("./plots/erfT_%1.png"          ,T_erf           ,Resolution(1024),2,128,-5,-5,5,5,MODE_ARG_ONLY);
+    plot_img_it("./plots/CT_%1.png"            ,T_C             ,Resolution(1024),2,64,-5,-5,5,5,MODE_ARG_ONLY);
+    plot_img_it("./plots/ST_%1.png"            ,T_S             ,Resolution(1024),2,64,-5,-5,5,5,MODE_ARG_ONLY);
+
+    //plot_all(Resolution(1024),MODE_ARG_ONLY);
     //plot_fractals(Resolution(1024));
 
     //plot_img("./plots/sqrt.png"     ,func_sqrt      ,Resolution(512),-2,-2,2,2,MODE_ARG_AND_MOD_ISO);

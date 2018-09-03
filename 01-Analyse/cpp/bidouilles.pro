@@ -20,8 +20,7 @@ SOURCES += main.cpp \
     functions.cpp \
     benchmarks.cpp \
     fractals.cpp \
-    Hypercplx.cpp \
-    cloud.cpp
+    Hypercplx.cpp
 
 HEADERS += \
     typedef.h \
@@ -34,5 +33,4 @@ HEADERS += \
     bernoulli.h \
     fractals.h \
     zeta.h \
-    Hypercplx.h \
-    cloud.h
+    Hypercplx.h

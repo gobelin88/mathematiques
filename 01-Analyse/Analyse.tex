@@ -20,6 +20,7 @@
 \usepackage{tikz}
 \usepackage{pgfplots}
 \usepackage{animate}
+\usepackage{braket}
 
 \input{structure.tex}
 
@@ -2271,6 +2272,57 @@ Finalement
 \begin{equation}
 	\boxed{arccos(z)=\frac{\pi}{2}-\sum_{n=0}^\infty C_{-\frac{1}{2}}^n (-1)^n \frac{z^{2n+1}}{2n+1}}
 \end{equation}
+
+\subsubsection{Fonction d'erreur : $erf(z)$\workon}
+\label{dl_erf}
+On défini la fonction d'erreur par l'intégrale:
+
+\[
+erf(z)=\frac{1}{\sqrt{\pi}}\int_{-z}^{z} e^{-t^2} dt
+\]
+
+Soit si on utilise le développement de la fonction exponentielle \ref{dl_exponentiel}:
+
+
+\begin{eqnarray}
+erf(z)&=&\frac{1}{\sqrt{\pi}}\int_{-z}^{z} \sum_{n=1}^{\infty} \frac{(-1)^n t^{2n} }{n!} dt\\
+&=&\frac{1}{\sqrt{\pi}} \sum_{n=1}^{\infty}  \frac{(-1)^n}{n!} \int_{-z}^{z} t^{2n}  dt\\
+&=&\frac{1}{\sqrt{\pi}} \sum_{n=1}^{\infty}  \frac{(-1)^n}{n!} \left[ \frac{t^{2n+1}}{2n+1} \right]_{-z}^{z}\\
+\end{eqnarray}
+
+Finalement 
+
+\begin{equation}
+\boxed{
+erf(z)=\frac{2}{\sqrt{\pi}} \sum_{n=1}^{\infty}  \frac{(-1)^n z^{2n+1}}{n!(2n+1)}}
+\end{equation}
+
+La fonction n'a pas de pôles le rayon de convergence est donc infini.
+
+\subsubsection{Intégrales de Fresnel : C(z), S(z)}
+
+Les intégrales de Fresnel sont les parties réelles et imaginaires de l'intégrale:
+
+\[
+I(z)=\int_0^{z} e^{iu^2}du \quad et \quad \left\{\begin{array}{c}C(z)=\Re(I(z))=\int_0^{z}cos(u^2)du\\S(z)=\Im(I(z))=\int_0^{z}sin(u^2)du\\ \end{array} \right.
+\]
+
+Si on applique le même raisonnement que pour la fonction erf(z):
+
+\begin{eqnarray}
+I(z)&=&\int_0^{z} \sum_{n=1}^{\infty} \frac{(iu^2)^n}{n!} du\\
+&=& \sum_{n=1}^{\infty} \frac{ i^n }{n!} \int_0^{z} u^{2n} du\\
+&=& \sum_{n=1}^{\infty} \frac{ i^n z^{2n+1}}{n!(2n+1)}\\
+\end{eqnarray}
+
+Du coup on obtient directement en prenant partie réelle et partie imaginaire:
+
+\begin{equation}
+\boxed{
+C(z)= \sum_{n=1}^{\infty} \frac{ (-1)^n z^{4n+1}}{(2n)!(4n+1)} \quad\quad et \quad\quad S(z)= \sum_{n=1}^{\infty} \frac{ (-1)^n z^{4n+3}}{(2n+1)!(4n+3)}}
+\end{equation}
+
+
 
 \subsection{Exemples : Séries de Laurent}
 \subsubsection{Fonction géométrique : $f(z)=\frac{1}{1-z}$}
@@ -4558,11 +4610,11 @@ Considérons l'espace $\Omega$ ainsi que l'ensemble des fonctions de cet espace, 
 $K$ est appelé le noyau de la transformation (Kernel). 
 Pour comprendre une telle transformation il est utile de faire l'analogie avec l'algèbre linéaire. Imaginons que les deux fonctions $f$ et $g$ soient des vecteurs, alors leur produit scalaire sur $I$ s'écrit :
 \begin{equation}
-\boxed{\scal{f}{g}=\int_a^b f(t)g(t)^* dt}
+\boxed{\braket{f|g}=\int_a^b f(t)g(t)^* dt}
 \end{equation}
 Le produit scalaire mesure la projection de $g(t)$ sur $f(t)$. Et si $<f,g>=0$ alors les fonctions sont dites orthogonales sur $I$. On comprend alors que le noyau représente une nouvelle base, dans laquelle, on va exprimer $f(t)$ (En dimension finie le noyau serait une matrice). $K(s)$ sont alors les vecteurs de la base, et la transformation peut encore s'écrire:
 \begin{equation}
-\boxed{\hat{f}(s)=\scal{K(s)}{f}}
+\boxed{\hat{f}(s)=\braket{K(s)|f}}
 \end{equation}
 
 On comprend alors qu'il peut exister beaucoup de transformations de ce type. (ex : Transformations de Fourier, Laplace, Mellin,...). Chacune ayant son propre noyau.\\
@@ -4572,8 +4624,8 @@ On comprend alors qu'il peut exister beaucoup de transformations de ce type. (ex
 \begin{equation}
 \boxed{\left\{
 \begin{array}{lll}
-Orthogonalite: & \forall s_1\ne s_2 &  \scal{K(s_1)}{K(s_2)}=0\\
-Normalite: &\forall s &  \scal{K(s)}{K(s)}=1\\
+Orthogonalite: & \forall s_1\ne s_2 & \braket{K(s_1)|K(s_2)}=0\\
+Normalite: &\forall s &  \braket{K(s)|K(s)}=1\\
 \end{array}
 \right.}
 \end{equation}
@@ -4606,7 +4658,7 @@ La transformée de Fourier généralise la notion de série de Fourier pour les fonc
 
 La transformée de Fourier est une transformation intégrale (voir \ref{eq_transform_int}), sur l'espace des fonctions de carré sommable $L^2$,sur l'intervalle $I=[-\infty,\infty]$, et de noyau $\boxed{K(s,t)=e^{-i t s}}$. Une fonction $f$ est de carrée sommable, si et seulement si son énergie est finie, c'est à dire:
 \[
-<f,f>=\int_{-\infty}^{\infty}|f(t)|^2 dt<\infty
+\braket{f|f}=\int_{-\infty}^{\infty}|f(t)|^2 dt<\infty
 \]
 La transformée de Fourier $\hat{f}(s)$ d'une fonction $f(t)$ avec $s,t \in\mathbb{R}$, s'écrit :
 \begin{equation}
@@ -4872,14 +4924,14 @@ Finalement on obtient que pour un argument complexe:
 \label{eq_fourier_kernel}
 Montrons que le noyau est orthogonal soit $s_1\ne  s_2$, calculons :
 \[
-\scal{K(s_1)}{K(s_2)}=\int_{-\infty}^{\infty}K(s_1,t)K(s_2,t)^* dt
+\braket{K(s_1)|K(s_2)}=\int_{-\infty}^{\infty}K(s_1,t)K(s_2,t)^* dt
 \]
 Si on remplace par la valeur du noyau $K(s,t)=e^{-i t s}$, on obtient:
 \[
-\scal{K(s_1)}{K(s_2)}=\int_{-\infty}^{\infty}e^{-i t s_1}e^{i t s_2} dt
+\braket{K(s_1)|K(s_2)}=\int_{-\infty}^{\infty}e^{-i t s_1}e^{i t s_2} dt
 \]
 \[
-\scal{K(s_1)}{K(s_2)}=\int_{-\infty}^{\infty}e^{i t (s_2-s_1)} dt
+\braket{K(s_1)|K(s_2)}=\int_{-\infty}^{\infty}e^{i t (s_2-s_1)} dt
 \]
 On retrouve l'intégrale de Fourier, et on montre (voir \ref{eq_fourier_int1} ou \ref{eq_fourier_int2}), que $\int_{-\infty}^\infty e^{-i s t} dt=2\pi \delta(s)$, donc si $s_1 \ne s_2$, on a bien :
 \[
@@ -7430,8 +7482,8 @@ Ce qui, si on sépare les  parties réelles et imaginaires se traduit par:
 Les intégrales incomplètes sont souvent notées :
 \begin{equation}
 \boxed{\left\{\begin{array}{l}
-C(t)=\int_0^{t} cos(z^2) dz= \frac{\sqrt{2\pi}}{4}\\
-S(t)=\int_0^{t} sin(z^2) dz= \frac{\sqrt{2\pi}}{4}\\
+C(t)=\int_0^{t} cos(z^2) dz\\
+S(t)=\int_0^{t} sin(z^2) dz\\
 \end{array}\right.}
 \end{equation}
 
@@ -10397,6 +10449,7 @@ $arctan(z)$&$\sum_{n=0}^{\infty} (-1)^n \frac{z^{2n+1}}{2n+1}$&$z-\frac{z^3}{3}+
 $arcsin(z)$&$\sum_{n=0}^\infty C_{-\frac{1}{2}}^n (-1)^n \frac{z^{2n+1}}{2n+1}$&&&\ref{dl_arcsin}\\
 $arccos(z)$&$\frac{\pi}{2}-\sum_{n=0}^\infty C_{-\frac{1}{2}}^n (-1)^n \frac{z^{2n+1}}{2n+1}$&&&\ref{dl_arccos}\\
 $\frac{z}{1-z-z^2}$&$\sum_{n=0}^{\infty}F_n z^z$&$z+z^2+2z^3+3z^4+5z^5+...+O(z^7)$&&\ref{eq_residus_fib}\\
+$erf(z)$&$\frac{2}{\sqrt{\pi}} \sum_{n=1}^{\infty}  \frac{(-1)^n z^{2n+1}}{n!(2n+1)}$& & $\infty$ &\ref{dl_erf}\\
 \hline
 \end{tabular}}
 \end{center}
