@@ -1,0 +1,598 @@
+
+
+\documentclass[12pt,a4paper]{article}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\geometry{hmargin=1.0cm,vmargin=2.0cm}
+\setlength{\parindent}{0cm}
+\title{Le Groupe de Rotations}
+\author{Loïc Huguel}
+
+
+\newcommand{\Jx}
+{
+\begin{pmatrix}
+	0&0&0\\
+	0&0&-1\\
+	0&1&0\\
+\end{pmatrix}
+}
+
+\newcommand{\Jy}
+{
+	\begin{pmatrix}
+		0&0&1\\
+		0&0&0\\
+		-1&0&0\\
+	\end{pmatrix}
+}
+
+\newcommand{\Jz}
+{
+	\begin{pmatrix}
+		0&-1&0\\
+		1&0&0\\
+		0&0&0\\
+	\end{pmatrix}
+}
+
+\begin{document}
+	\maketitle
+	
+	\tableofcontents
+	
+	\newpage
+	\section{Représentation par SO(3)}
+	
+	\subsection{Le groupe SO(3)}
+	
+	L'action de $R$ sur le vecteur $v$ s'obtient avec le produit matriciel:
+	\[
+		u=Rv
+	\]
+	Si $R$ est une rotation alors alors, elle préserve les longueurs des vecteurs.	
+	\begin{eqnarray*}
+		 |u|&=&|v|\\
+		u^Tu&=&v^Tv\\
+		(Rv)^TRv&=&v^Tv\\
+		v^TR^TRv&=&v^Tv\\
+	\end{eqnarray*}
+	Cela implique que $R$ est une matrice orthogonale $R\in O(3)$:
+	\[
+		\boxed{R^TR=I}
+	\]
+
+	De plus on a :
+	\[
+	det(R^TR)=det(I) \Rightarrow det(R)^2= 1 \Rightarrow \boxed{det(R)=\pm 1}
+	\]
+	
+	SO(3), le groupe des matrices orthogonales de déterminant 1 forme un sous-groupe de O(3). Le groupe des matrices orthogonales de déterminant -1 n'est pas un sous groupe puisque la composition de deux telles matrices est de déterminant 1.
+	
+	
+	\newpage
+	\subsection{Algèbre de Lie de SO(3)}
+	
+	Si on exprime les représentation matricielles des rotations dans les plans $yz,xz$ et $xy$ ou ce qui est équivalent pour l'espace de dimension 3, autour des axes $x,y$ et $z$, on a trivialement:
+	
+	\[	
+	R(\vec{x},\phi)=
+	\begin{pmatrix}
+	1&0&0\\
+	0&cos(\phi)&-sin(\phi)\\
+	0&sin(\phi)&cos(\phi)\\	
+	\end{pmatrix}\ 
+	R(\vec{y},\phi)=
+	\begin{pmatrix}
+	cos(\phi)&0&sin(\phi)\\
+	0&1&0\\
+	-sin(\phi)&0&cos(\phi)\\
+	\end{pmatrix}
+	\  
+	R(\vec{z},\phi)=
+	\begin{pmatrix}
+	cos(\phi)&-sin(\phi)&0\\
+	sin(\phi)&cos(\phi)&0\\
+	0&0&1\\
+	\end{pmatrix}
+	\]
+	Les rotations infinitésimales d'ordre 1 s'exprime alors par:
+	\[	
+	R(\vec{x},\delta\phi)=
+	\begin{pmatrix}
+	1&0&0\\
+	0&1&-\delta\phi\\
+	0&\delta\phi&1\\	
+	\end{pmatrix}= I + \delta\phi \Jx= I + \delta\phi J_x
+	\]
+	\[	
+	R(\vec{y},\delta\phi)=
+	\begin{pmatrix}
+	1&0&\delta\phi\\
+	0&1&0\\
+	-\delta\phi&0&1\\
+	\end{pmatrix}= I + \delta\phi \Jy= I + \delta\phi J_z
+	\]
+	\[	
+	R(\vec{z},\delta\phi)=
+	\begin{pmatrix}
+	1&-\delta\phi&0\\
+	\delta\phi&1&0\\
+	0&0&1\\
+	\end{pmatrix}= I + \delta\phi \Jz= I + \delta\phi J_z
+	\]
+	
+	Maintenant, si on construit la rotation par une infinité d'action de la rotation infinitésimale on obtient une représentation par une exponentielle:
+	
+	\[	
+		R(\vec{x},\phi) = \lim_{n \to \infty} R\left(\vec{x},\frac{\phi}{n}\right)^n= \lim_{n \to \infty} \left( I+\frac{\phi J_x}{n}\right)^n= e^{\phi J_x}
+	\]	
+	
+	Cette formule se généralise pour un axe quelconque $\vec{n}$:
+	
+	\[
+		\boxed{R(\vec{n},\phi) = e^{\vec{n}.\vec{J} \phi} \quad \quad avec\quad\quad \vec{J}=(J_x,J_y,J_z)^T }
+	\]
+	
+	Maintenant on peut étudier les crochets de Lie :
+	
+	\[
+		[J_x,J_y]=J_xJ_y-J_yJ_x=\Jx\Jy-\Jy\Jx=\Jz=J_z
+	\]
+	\[
+		[J_y,J_z]=J_yJ_z-J_zJ_y=\Jy\Jz-\Jz\Jy=\Jx=J_x
+	\]
+	\[
+		[J_z,J_x]=J_zJ_x-J_xJ_z=\Jz\Jx-\Jx\Jz=\Jy=J_y
+	\]
+	
+	Finalement on a 
+	
+	\[
+		\boxed{[J_i,J_j]=\sum_k \epsilon_{ijk}J_k}
+	\]
+	
+	Avec $\epsilon_{ijk}$ le symbole de Levi-Civita:
+	
+	\[
+		\epsilon_{ijk}=\left\{
+		\begin{array}{l}
+		+1\ Si\ (i,j,k)\ est \ (1,2,3)(2,3,1)(3,1,2)\\
+		-1\ Si\ (i,j,k)\ est \ (3,2,1)(2,1,3)(1,3,2)\\
+		0\ Sinon\\
+		\end{array}
+		\right.
+	\]
+	
+	\subsection{Formule de Rodrigue}
+	Partons de :
+	
+	\[
+		R(\vec{n},\phi) = e^{\vec{n}.\vec{J} \phi}
+	\]
+	
+	Il s'agit de calculer l'exponentielle. Notons $M=\vec{n}.\vec{J}$
+	
+	\[
+		\boxed{M=\begin{pmatrix}
+			0&-n_z&n_y\\
+			n_z&0&-n_x\\
+			-n_y&n_x&0\\
+			\end{pmatrix}}
+		\quad\quad et \quad\quad \boxed{M\vec{v}=\vec{n} \times \vec{v}}
+	\]
+	
+	On a 
+	\[
+	M^2=\begin{pmatrix}
+	0&-n_z&n_y\\
+	n_z&0&-n_x\\
+	-n_y&n_x&0\\
+	\end{pmatrix}\begin{pmatrix}
+	0&-n_z&n_y\\
+	n_z&0&-n_x\\
+	-n_y&n_x&0\\
+	\end{pmatrix}=\begin{pmatrix}
+	n_z^2+n_y^2&n_x n_y& n_x n_z\\
+	n_x n_y&n_z^2+n_x^2& n_y n_z\\
+	n_x n_z&n_y n_z&n_y^2+n_x^2\\
+	\end{pmatrix}
+	\]
+	Et 
+	\[
+	M^3=\begin{pmatrix}
+	-(n_z^2+n_y^2)&n_x n_y& n_x n_z\\
+	n_x n_y&-(n_z^2+n_x^2)& n_y n_z\\
+	n_x n_z&n_y n_z&-(n_y^2+n_x^2)\\
+	\end{pmatrix}\begin{pmatrix}
+	0&-n_z&n_y\\
+	n_z&0&-n_x\\
+	-n_y&n_x&0\\
+	\end{pmatrix}
+	\]
+	\[
+	M^3=(n_z^2+n_y^2+n_x^2)
+	\begin{pmatrix}
+	0&n_z&-n_y\\
+	-n_z&0&n_x\\
+	n_y&-n_x&0\\
+	\end{pmatrix}
+	\]
+	\[
+	\boxed{M^3=-M}
+	\]
+	
+	\[
+		\begin{array}{c|ccccccc}
+		n=&0&1&2&3&4&5&6\\
+		\hline
+		M^n=&I&M&M^2&-M&-M^2&M&M^2\\
+		\end{array}
+	\]
+	
+	
+	Donc $M^{2n+1}=(-1)^{n} M$ et $M^{2n}=(-1)^{n+1} M^2$ si $n>0$ sinon $M^0=I$ et donc on va pouvoir calculer explicitement l'exponentielle par sont développement de Taylor :
+	
+	\[
+	e^{\vec{n}.\vec{J}\phi}=e^{M\phi} = \sum_{n=0}^{\infty} \frac{M^n\phi^n}{n!}=\sum_{n=0}^{\infty} \frac{M^{2n}\phi^{2n}}{(2n)!} + \sum_{n=0}^{\infty} \frac{M^{2n+1}\phi^{2n+1}}{(2n+1)!}
+	\]
+	
+	\begin{eqnarray*}
+	e^{\vec{n}.\vec{J}\phi}&=& I+M^2\sum_{n=1}^{\infty} \frac{(-1)^{n+1} \phi^{2n}}{(2n)!} + M\sum_{n=0}^{\infty} \frac{(-1)^{n}\phi^{2n+1}}{(2n+1)!}\\
+	&=& I-M^2\sum_{n=1}^{\infty} \frac{(-1)^{n} \phi^{2n}}{(2n)!} + M\sum_{n=0}^{\infty} \frac{(-1)^{n}\phi^{2n+1}}{(2n+1)!}\\
+	&=& I-M^2 (cos(\phi)-1) + M sin(\phi)\\
+	\end{eqnarray*}
+	
+	Finalement 
+	
+	\[
+	\boxed{R=e^{M\phi}=I+sin(\phi)M+(1-cos(\phi))M^2 }
+	\]
+	
+	\newpage
+	Si on applique à un vecteur:
+	
+	\begin{eqnarray*}
+	\vec{v'}&=& R \vec{v} \\
+	&=& (I+sin(\phi)M+(1-cos(\phi))M^2) \vec{v} \\
+	&=& \vec{v}+sin(\phi)M\vec{v}+(1-cos(\phi))M M\vec{v}  \\
+	&=& \vec{v}+sin(\phi)(\vec{n}\times \vec{v})+(1-cos(\phi))M (\vec{n}\times \vec{v})  \\
+	&=& \vec{v}+sin(\phi)(\vec{n}\times \vec{v})+(1-cos(\phi)) (\vec{n}\times (\vec{n}\times \vec{v}))  \\
+	\end{eqnarray*}
+	
+Mais $\vec{u}\times(\vec{v}\times \vec{w})=(\vec{u}.\vec{w})\vec{v}-(\vec{u}.\vec{v})\vec{w}$ donc :
+    
+    \begin{eqnarray*}
+    \vec{n}\times(\vec{n}\times \vec{v})&=&(\vec{n}.\vec{v})\vec{n}-(\vec{n}.\vec{n})\vec{v}\\
+	&=&(\vec{n}.\vec{v})\vec{n}-\vec{v}\\	
+	\end{eqnarray*}
+
+Donc 
+	\begin{eqnarray*}
+		\vec{v'}&=& \vec{v}+sin(\phi)(\vec{n}\times \vec{v})+(1-cos(\phi)) ((\vec{n}.\vec{v})\vec{n}-\vec{v})  \\
+		&=& \vec{v}+sin(\phi)(\vec{n}\times \vec{v})+(1-cos(\phi)) ((\vec{n}.\vec{v})\vec{n})+cos(\phi)\vec{v}-\vec{v}  \\
+	\end{eqnarray*}
+Et finalement :
+\[
+\boxed{\vec{v'}= cos(\phi)\vec{v}+sin(\phi)(\vec{n}\times \vec{v})+(1-cos(\phi)) (\vec{n}.\vec{v})\vec{n} }
+\]
+
+\newpage
+\section{Représentation par SU(2)}
+	\subsection{Les matrices de Pauli}
+	 Introduisons les matrices $\sigma$ de Pauli:
+	
+	\[
+	\sigma_x=\begin{pmatrix}
+	0&1\\
+	1&0\\
+	\end{pmatrix}\quad
+	\sigma_y=\begin{pmatrix}
+	0&-i\\
+	i&0\\
+	\end{pmatrix}\quad
+	\sigma_z=\begin{pmatrix}
+	1&0\\
+	0&-1\\
+	\end{pmatrix}\quad et\quad \vec{\sigma}=(\sigma_x,\sigma_y,\sigma_z)^T
+	\]
+	
+	On peut observer que le carré de ces matrices donne l'identité et que les matrices sont hermitiennes:  
+	
+	\[
+		\boxed{\sigma_i^2=I}\quad\quad et \quad\quad \boxed{\sigma^{\dagger}=\sigma}
+	\]
+	
+	En effet:
+	\[
+	\sigma_x^2=\begin{pmatrix}
+	0&1\\
+	1&0\\
+	\end{pmatrix}
+	\begin{pmatrix}
+	0&1\\
+	1&0\\
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1&0\\
+	0&1\\
+	\end{pmatrix}
+	\]
+	\[
+	\sigma_y^2=\begin{pmatrix}
+	0&-i\\
+	i&0\\
+	\end{pmatrix}
+	\begin{pmatrix}
+	0&-i\\
+	i&0\\
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1&0\\
+	0&1\\
+	\end{pmatrix}
+	\]
+	\[
+	\sigma_z^2=\begin{pmatrix}
+	1&0\\
+	0&-1\\
+	\end{pmatrix}
+	\begin{pmatrix}
+	1&0\\
+	0&-1\\
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	1&0\\
+	0&1\\
+	\end{pmatrix}
+	\]
+	
+	Et plus généralement l'anti-commutateur est nul si $i\ne j$:
+	
+	\[
+		\boxed{ \{\sigma_i,\sigma_j\}=\sigma_i\sigma_j+\sigma_j\sigma_i=2 \delta_{ij} I}
+	\]
+	En effet:
+	\[
+	\sigma_x\sigma_y+\sigma_y\sigma_x=\begin{pmatrix}
+	0&1\\
+	1&0\\
+	\end{pmatrix}
+	\begin{pmatrix}
+	0&-i\\
+	i&0\\
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+	0&-i\\
+	i&0\\
+	\end{pmatrix}
+	\begin{pmatrix}
+	0&1\\
+	1&0\\
+	\end{pmatrix}	
+	=
+	\begin{pmatrix}
+	i&0\\
+	0&-i\\
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+	-i&0\\
+	0&i\\
+	\end{pmatrix}
+	=0
+	\]
+	
+	Mais pour les commutateurs on obtient:
+	
+	\[
+	\boxed{[\sigma_i,\sigma_j]=2i \sum_k \epsilon_{ijk}\sigma_k}
+	\]
+	En effet:
+	\[
+	\sigma_x\sigma_y-\sigma_y\sigma_x=\begin{pmatrix}
+	0&1\\
+	1&0\\
+	\end{pmatrix}
+	\begin{pmatrix}
+	0&-i\\
+	i&0\\
+	\end{pmatrix}
+	-
+	\begin{pmatrix}
+	0&-i\\
+	i&0\\
+	\end{pmatrix}
+	\begin{pmatrix}
+	0&1\\
+	1&0\\
+	\end{pmatrix}	
+	=
+	\begin{pmatrix}
+	i&0\\
+	0&-i\\
+	\end{pmatrix}
+	-
+	\begin{pmatrix}
+	-i&0\\
+	0&i\\
+	\end{pmatrix}
+	=2i \sigma_z
+	\]
+	
+	Maintenant si on pose :
+	
+	\[
+		\boxed{K_i=-\frac{i}{2}\sigma_i}
+	\quad\quad alors \quad\quad
+	[K_i,K_j]=-\frac{1}{4}[\sigma_i,\sigma_j]=-\frac{i}{2} \sum_k \epsilon_{ijk}\sigma_k = \sum_k \epsilon_{ijk}K_k
+	\]
+	
+	Finalement les matrices $K_i$ satisfont le crochet de Lie de SO(3):
+	\[
+	\boxed{[K_i,K_j]= \sum_k \epsilon_{ijk}K_k}
+	\]
+	
+\newpage
+\subsection{Calcul de l'exponentielle pour SU(2)}
+
+Tout groupe de 3 objets vérifiant l'algèbre de lie de SO(3) fournit une représentation du groupe de rotations. Donc les matrices $K_i$ fournissent une représentation du groupe de rotation par l'application exponentielle:
+
+\[
+\boxed{U(\vec{n},\phi) = e^{\vec{n}.\vec{K} \phi}= e^{-\frac{i}{2}\vec{n}.\vec{\sigma} \phi}}
+\]
+
+On remarque alors que les rotations sont représentées p par une matrice unitaire $U$:
+
+\[
+\boxed{U^{\dagger}U=I}
+\] 
+
+En effet:
+
+\begin{eqnarray*}
+U^{\dagger}U&=&\left(e^{-\frac{i}{2}\vec{n}.\vec{\sigma} \phi}\right)^\dagger e^{-\frac{i}{2}\vec{n}.\vec{\sigma} \phi}\\
+&=&e^{\frac{i}{2}\vec{n}.\vec{\sigma^\dagger} \phi} e^{-\frac{i}{2}\vec{n}.\vec{\sigma} \phi}\\
+&=&e^{\frac{i}{2}\vec{n}.\vec{\sigma} \phi} e^{-\frac{i}{2}\vec{n}.\vec{\sigma} \phi}\\
+&=&I\\
+\end{eqnarray*}
+
+De manière analogue à ce que nous avions fait pour établir la formule de Rodrigue. posons :
+
+\[
+	M=\vec{n}.\vec{\sigma}=(n_x \sigma_x+n_y \sigma_y+n_z \sigma_z)= \begin{pmatrix}
+	n_z&n_x-i n_y\\
+	n_x+i n_y&-n_z\\
+	\end{pmatrix}
+\]
+
+Calculons $M^2$:
+
+\[
+	M^2=\begin{pmatrix}
+	n_z&n_x-i n_y\\
+	n_x+i n_y&-n_z\\
+	\end{pmatrix}
+	\begin{pmatrix}
+	n_z&n_x-i n_y\\
+	n_x+i n_y&-n_z\\
+	\end{pmatrix}
+	=
+	\begin{pmatrix}
+	n_x^2+ n_y^2+n_z^2&0\\
+	0&n_x^2+ n_y^2+n_z^2\\
+	\end{pmatrix}
+\]
+
+Donc comme $|\vec{n}|=1$ on obtient que $\boxed{M^2=I}$. Calculons maintenant l'exponentielle:
+
+\begin{eqnarray*}
+U(\vec{n},\phi) &=& e^{-\frac{i}{2} M \phi}\\
+&=& \sum_{n=0}^{\infty} \frac{(-i M \frac{\phi}{2})^n}{n!} \\
+&=& \sum_{n=0}^{\infty} \frac{(-i M \frac{\phi}{2})^{2n}}{(2n)!} +\sum_{n=0}^{\infty} \frac{(-i M \frac{\phi}{2})^{2n+1}}{(2n+1)!} \\
+&=& I \sum_{n=0}^{\infty} \frac{(-1)^n (\frac{\phi}{2})^{2n}}{(2n)!} +M\sum_{n=0}^{\infty} \frac{(-i)^{2n+1} (\frac{\phi}{2})^{2n+1}}{(2n+1)!} \\
+&=& I \sum_{n=0}^{\infty} \frac{(-1)^n (\frac{\phi}{2})^{2n}}{(2n)!}-i M\sum_{n=0}^{\infty} \frac{(-1)^{n} (\frac{\phi}{2})^{2n+1}}{(2n+1)!} \\
+&=& I \cos\left(\frac{\phi}{2}\right)-i M \sin\left(\frac{\phi}{2}\right)\\
+\end{eqnarray*}
+
+Finalement :
+
+\[
+\boxed{U(\vec{n},\phi)= I \cos\left(\frac{\phi}{2}\right)-i \vec{n}.\vec{\sigma} \sin\left(\frac{\phi}{2}\right)}
+\]
+
+\newpage
+\subsection{Action de SU(2)}
+
+A chaque vecteur $\vec{r}$ de $\mathbb{R}^3$, on peut faire correspondre la matrice $X$ tel que:
+
+\[
+	\boxed{X=\vec{r}.\vec{\sigma}} \quad soit \quad X=\begin{pmatrix}
+	r_z&r_x-i r_y\\
+	r_x+i r_y&-r_z\\
+	\end{pmatrix}
+\]
+
+Calculons le produit de deux tel matrices:
+\begin{eqnarray*}
+(\vec{a}.\vec{\sigma}) (\vec{b}.\vec{\sigma})&=&\begin{pmatrix}
+a_z&a_x-i a_y\\
+a_x+i a_y&-a_z\\
+\end{pmatrix}
+\begin{pmatrix}
+b_z&b_x-i b_y\\
+b_x+i b_y&-b_z\\
+\end{pmatrix}\\
+&=&
+\begin{pmatrix}
+(b_x a_x+ b_y a_y+a_z b_z)  +i (b_y a_x- b_x a_y)& (b_x a_z- b_z a_x) + i (b_z a_y- b_y a_z)  \\
+(b_z a_x  - b_x a_z) + i(b_z a_y-b_y a_z)& (b_x a_x +b_y a_y+ b_z a_z)+ i (b_x a_y - b_y a_x )\\
+\end{pmatrix}\\
+&=&
+I \vec{a}.\vec{b}+ i\begin{pmatrix}
+(b_y a_x- b_x a_y)&   (b_z a_y- b_y a_z)-i(b_x a_z- b_z a_x)  \\
+ (b_z a_y-b_y a_z)+i(b_x a_z - b_z a_x)& (b_x a_y - b_y a_x )\\
+\end{pmatrix}
+\end{eqnarray*}
+
+Et si on pose :
+
+\[
+\vec{c}=\begin{pmatrix}
+b_z a_y- b_y a_z\\
+b_x a_z- b_z a_x\\
+b_y a_x- b_x a_y\\
+\end{pmatrix}= \vec{a}\times\vec{b}
+\]
+
+Donc finalement on a la relation :
+
+\[
+ \boxed{ (\vec{a}\vec{\sigma}) (\vec{b}\vec{\sigma}) = \vec{a}.\vec{b} I + i(\vec{a}\times\vec{b}).\vec{\sigma}}
+\]
+
+On peut inverser la carte par la relation:
+
+\[
+\boxed{r_i= \frac{1}{2} Tr(X.\sigma_i)}
+\]
+
+On peut alors agir sur $X$ par :
+
+\[
+	\boxed{ X'=U X U^{\dagger} }
+\]
+
+Ce qui donne en s'armant de courage:
+\begin{eqnarray*}
+	\vec{r'}.\vec{\sigma}&=&U (\vec{r}.\vec{\sigma}) U^{\dagger}\\
+	&=&\left(I \cos\left(\frac{\phi}{2}\right)-i \vec{n}.\vec{\sigma} \sin\left(\frac{\phi}{2}\right)\right) (\vec{r}.\vec{\sigma}) \left(I \cos\left(\frac{\phi}{2}\right)-i \vec{n}.\vec{\sigma} \sin\left(\frac{\phi}{2}\right)\right)^{\dagger}\\
+	&=&\left(I \cos\left(\frac{\phi}{2}\right)-i \vec{n}.\vec{\sigma} \sin\left(\frac{\phi}{2}\right)\right) (\vec{r}.\vec{\sigma}) \left(I \cos\left(\frac{\phi}{2}\right)+i \vec{n}.\vec{\sigma} \sin\left(\frac{\phi}{2}\right)\right)\\
+	&=&\left((\vec{r}.\vec{\sigma}) \cos\left(\frac{\phi}{2}\right)-i (\vec{n}.\vec{\sigma})(\vec{r}.\vec{\sigma}) \sin\left(\frac{\phi}{2}\right)\right)  \left(I \cos\left(\frac{\phi}{2}\right)+i \vec{n}.\vec{\sigma} \sin\left(\frac{\phi}{2}\right)\right)\\
+	&=&\left((\vec{r}.\vec{\sigma}) \cos^2\left(\frac{\phi}{2}\right)-i (\vec{n}.\vec{\sigma})(\vec{r}.\vec{\sigma}) \sin\left(\frac{\phi}{2}\right)\cos\left(\frac{\phi}{2}\right)\right) + \\& & \left(i(\vec{r}.\vec{\sigma})(\vec{n}.\vec{\sigma}) \cos\left(\frac{\phi}{2}\right)\sin\left(\frac{\phi}{2}\right)+ (\vec{n}.\vec{\sigma})(\vec{r}.\vec{\sigma})(\vec{n}.\vec{\sigma}) \sin^2\left(\frac{\phi}{2}\right)\right)\\
+	&=&\left((\vec{r}.\vec{\sigma}) \cos^2\left(\frac{\phi}{2}\right)-i (\vec{n}.\vec{r} I + i(\vec{n}\times\vec{r}).\vec{\sigma}) \sin\left(\frac{\phi}{2}\right)\cos\left(\frac{\phi}{2}\right)\right) + \\& & \left(i(\vec{r}.\vec{n} I + i(\vec{r}\times\vec{n}).\vec{\sigma}) \cos\left(\frac{\phi}{2}\right)\sin\left(\frac{\phi}{2}\right)+ (\vec{n}.\vec{\sigma})(\vec{r}.\vec{\sigma})(\vec{n}.\vec{\sigma}) \sin^2\left(\frac{\phi}{2}\right)\right)\\
+	&=&(\vec{r}.\vec{\sigma}) \cos^2\left(\frac{\phi}{2}\right)-i (\vec{n}.\vec{r} I + i(\vec{n}\times\vec{r}).\vec{\sigma}-\vec{r}.\vec{n} I - i(\vec{r}\times\vec{n}).\vec{\sigma}) \sin\left(\frac{\phi}{2}\right)\cos\left(\frac{\phi}{2}\right) + \\& & (\vec{n}.\vec{\sigma})(\vec{r}.\vec{\sigma})(\vec{n}.\vec{\sigma}) \sin^2\left(\frac{\phi}{2}\right)\\
+	&=&\frac{1}{2}(\vec{r}.\vec{\sigma}) (\cos(\phi)+1)+ 2((\vec{n}\times\vec{r}).\vec{\sigma}) \sin\left(\frac{\phi}{2}\right)\cos\left(\frac{\phi}{2}\right) + (\vec{n}.\vec{\sigma})(\vec{r}.\vec{n} I + i(\vec{r}\times\vec{n}).\vec{\sigma}) \sin^2\left(\frac{\phi}{2}\right)\\
+	&=&\frac{1}{2}(\vec{r}.\vec{\sigma}) (\cos(\phi)+1)+ 2((\vec{n}\times\vec{r}).\vec{\sigma}) \sin\left(\frac{\phi}{2}\right)\cos\left(\frac{\phi}{2}\right) + (\vec{r}.\vec{n})(\vec{n}.\vec{\sigma})\sin^2\left(\frac{\phi}{2}\right)+ i(\vec{n}.\vec{\sigma})((\vec{r}\times\vec{n}).\vec{\sigma}) \sin^2\left(\frac{\phi}{2}\right)\\
+	&=&\left(\frac{1}{2} (\cos(\phi)+1) \vec{r} + \sin(\phi)(\vec{n}\times\vec{r}) + \sin^2\left(\frac{\phi}{2}\right)(\vec{r}.\vec{n})\vec{n}\right).\vec{\sigma}+ i(\vec{n}.\vec{\sigma})((\vec{r}\times\vec{n}).\vec{\sigma}) \sin^2\left(\frac{\phi}{2}\right)\\
+	&=&\left(\frac{1}{2} (\cos(\phi)+1) \vec{r} + \sin(\phi)(\vec{n}\times\vec{r}) + \sin^2\left(\frac{\phi}{2}\right)(\vec{r}.\vec{n})\vec{n}\right).\vec{\sigma}+ i( \vec{n}.(\vec{r}\times \vec{n}) I + i(\vec{n}\times (\vec{r}\times \vec{n})).\vec{\sigma} ) \sin^2\left(\frac{\phi}{2}\right)\\
+	&=&\left(\frac{1}{2} (\cos(\phi)+1) \vec{r} + \sin(\phi)(\vec{n}\times\vec{r}) + \sin^2\left(\frac{\phi}{2}\right)(\vec{r}.\vec{n})\vec{n}\right).\vec{\sigma}-( ((\vec{n}.\vec{n})\vec{r} - (\vec{n}.\vec{r})\vec{n}).\vec{\sigma} )	
+	\sin^2\left(\frac{\phi}{2}\right)\\	
+	&=&\left(\frac{1}{2} (\cos(\phi)+1) \vec{r} + \sin(\phi)(\vec{n}\times\vec{r}) + \frac{1}{2}(1-\cos(\phi)) (-\vec{r} + 2 (\vec{n}.\vec{r})\vec{n} ) \right).\vec{\sigma}\\	
+	&=&\left(\cos(\phi) \vec{r}+\frac{1}{2}(1-\cos(\phi))\vec{r} + \sin(\phi)(\vec{n}\times\vec{r}) + \frac{1}{2}(1-\cos(\phi)) (-\vec{r} + 2 (\vec{n}.\vec{r})\vec{n}  ) \right).\vec{\sigma}\\
+	&=&\left(\cos(\phi) \vec{r} + \sin(\phi)(\vec{n}\times\vec{r}) + (1-\cos(\phi)) ( (\vec{n}.\vec{r})\vec{n}  ) \right).\vec{\sigma}\\
+\end{eqnarray*}
+
+Ce qui donne bien :
+
+\[
+\boxed{r'=\cos(\phi) \vec{r} + \sin(\phi)(\vec{n}\times\vec{r}) + (1-\cos(\phi)) ( (\vec{n}.\vec{r})\vec{n}  )}
+\]
+
+\end{document}
