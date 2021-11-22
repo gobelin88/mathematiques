@@ -10,6 +10,9 @@
 \title{Le Groupe de Rotations}
 \author{Loïc Huguel}
 
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
 
 \newcommand{\Jx}
 {
@@ -166,7 +169,7 @@
 		\right.
 	\]
 	
-	\subsection{Formule de Rodrigue}
+	\subsection{Formule d'Euler-Rodrigues}
 	Partons de :
 	
 	\[
@@ -176,7 +179,7 @@
 	Il s'agit de calculer l'exponentielle. Notons $M=\vec{n}.\vec{J}$
 	
 	\[
-		\boxed{M=\begin{pmatrix}
+		\boxed{M=\floor{n}_{\times}=\begin{pmatrix}
 			0&-n_z&n_y\\
 			n_z&0&-n_x\\
 			-n_y&n_x&0\\
@@ -195,9 +198,9 @@
 	n_z&0&-n_x\\
 	-n_y&n_x&0\\
 	\end{pmatrix}=\begin{pmatrix}
-	n_z^2+n_y^2&n_x n_y& n_x n_z\\
-	n_x n_y&n_z^2+n_x^2& n_y n_z\\
-	n_x n_z&n_y n_z&n_y^2+n_x^2\\
+	-(n_z^2+n_y^2)&n_x n_y& n_x n_z\\
+	n_x n_y&-(n_z^2+n_x^2)& n_y n_z\\
+	n_x n_z&n_y n_z&-(n_y^2+n_x^2)\\
 	\end{pmatrix}
 	\]
 	Et 
@@ -279,6 +282,200 @@ Et finalement :
 \boxed{\vec{v'}= cos(\phi)\vec{v}+sin(\phi)(\vec{n}\times \vec{v})+(1-cos(\phi)) (\vec{n}.\vec{v})\vec{n} }
 \]
 
+	\newpage
+	\subsection{Axe et angle de rotation}
+	
+Soit $R$ une matrice de rotation. Alors l'axe de rotation $n$ est un vecteur propre de cette matrice de valeur propre 1 et aussi de la matrice de rotation inverse. Donc :
+
+\[
+R\vec{n}=\vec{n} \qquad et\ aussi \qquad R^T\vec{n}=\vec{n}
+\]  
+
+Donc 
+
+\[
+\boxed{(R-R^T)\vec{n}=0}
+\]
+
+On peu alors remarque que $(R-R^T)$ est une matrice anti-symétrique de trace nulle. Et si on pose 
+$(R-R^T)=k \floor{n}_{\times}$ alors l'équation précédente est bien vérifiée car $k \vec{n}\times \vec{n}=0$. Pour identifier $k$ on peut calculer explicitement $(R-R^T)$ avec la formule d'Euler-Rodrigues ce qui donne:
+
+\begin{eqnarray*}
+	(R-R^T)&=& (I +\sin(\phi) M+(1-\cos(\phi))M^2)-(I^T +\sin(\phi) M^T+(1-\cos(\phi))(M^2)^T)\\
+	&\qquad Mais\qquad& M^T=-M\\
+	&\qquad Et \qquad& M^2=(M^2)^T\\
+	&=& 2 \sin(\phi) M\\
+\end{eqnarray*}
+
+Soit finalement:
+\[
+\boxed{(R-R^T)=2 \sin(\phi)\floor{n}_{\times}}
+\]
+
+Attention car il existe des matrices de rotation tel que $R=R^T$ qui correspondent au cas ou $sin(\phi)=0$, pour ces cas il est beaucoup plus stable numériquement de décomposer $R$ en valeur propre et de prendre le vecteur propre associée à la valeur propre de 1.\\
+
+Maintenant nous avons aussi:
+
+\[
+	\boxed{tr(R)=1+2 \cos(\phi)}
+\]
+
+En effet :
+
+\begin{eqnarray*}
+tr(R)&=&tr(I)+(1-\cos(\phi)) tr(M^2)\\
+&=&3-(1-\cos(\phi))(n_z^2+n_y^2+n_z^2+n_x^2+n_y^2+n_x^2)\\
+&=&3-(1-\cos(\phi))(2)\\
+&=&1+2 \cos(\phi)\\
+\end{eqnarray*}
+	
+	\newpage
+	\subsection{Composition des rotations (vecteurs colonnes)}
+	
+	Soit $A$ et $B$ deux repères orthonormés exprimés dans une base quelconque par des vecteurs colonnes:
+	
+	\[
+		A=\left(\begin{array}{c|c|c}
+		&&\\
+		\vec{A_x}&\vec{A_y}&\vec{A_z}\\
+		&&\\
+		\end{array}
+		\right)		
+		\qquad 
+		et
+		\qquad
+		B=\left(\begin{array}{c|c|c}
+		&&\\
+		\vec{B_x}&\vec{B_y}&\vec{B_z}\\
+		&&\\
+		\end{array}
+		\right)
+	\]
+	
+	
+	Et soit $R_{AB}$ la matrice de rotation telle que:
+	
+	\[
+	\boxed{B=A R_{AB}} \quad \quad donc \quad \quad \boxed{R_{AB}=A^TB}
+	\]
+	
+	Les $R$ ainsi défini respectent la relation de Chasles. En effet si on introduit un troisième repère $C$ et $R_{AC}$,$R_{CB}$ les matrices de rotation telles que:
+	
+	\[
+	C=A R_{AC}\quad et \quad B=C R_{CB}  \quad\quad Soit\quad \quad R_{AC}=A^TC \quad et\quad  R_{CB}=C^TB
+	\]
+	
+	Alors 
+	
+	\[
+	R_{AC}R_{CB}=A^TC C^TB = A^TB
+	\]
+	Et donc 
+	\[
+	\boxed{R_{AC}R_{CB}=R_{AB}}
+	\]
+	
+	$R_{AB}$ sont les vecteurs de la base $B$ exprimés dans $A$ c'est à dire que:
+	
+	\[
+		R_{AB}=A^TB=
+		\left(\begin{array}{ccc}
+		&\vec{A_x}&\\
+		\hline
+		&\vec{A_y}&\\
+		\hline
+		&\vec{A_z}&\\
+		\end{array}
+		\right)
+		\left(\begin{array}{c|c|c}
+		&&\\
+		\vec{B_x}&\vec{B_y}&\vec{B_z}\\
+		&&\\
+		\end{array}
+		\right)
+		=
+		\left(\begin{array}{ccc}
+		\vec{A_x}.\vec{B_x}&\vec{A_x}.\vec{B_y}&\vec{A_x}.\vec{B_z}\\
+		\vec{A_y}.\vec{B_x}&\vec{A_y}.\vec{B_y}&\vec{A_y}.\vec{B_z}\\
+		\vec{A_z}.\vec{B_x}&\vec{A_z}.\vec{B_y}&\vec{A_z}.\vec{B_z}\\
+		\end{array}
+		\right)
+	\]
+	
+	Maintenant, soit $V_{A}$ et $V_{B}$, des vecteurs exprimés respectivement dans les bases $A$ et $B$. Alors:
+	
+	\[
+	A V_{A} =B V_{B} \quad\quad Soit\quad \quad V_{A} =A^T B V_{B}
+	\]
+	
+	Par conséquent on a :
+	
+	\[
+	\boxed{V_{A} = R_{AB} V_{B}} 
+	\]
+	
+	\newpage
+	\subsection{La composition des rotations (vecteurs lignes)}
+	
+	Soit $A$ et $B$ deux repères orthonormés exprimés dans une base quelconque par des vecteurs lignes. 
+	
+	\[
+	A=\left(\begin{array}{ccc}
+	&\vec{A_x}&\\
+	\hline
+	&\vec{A_y}&\\
+	\hline
+	&\vec{A_z}&\\
+	\end{array}
+	\right)		
+	\qquad 
+	et
+	\qquad
+	B=\left(\begin{array}{ccc}
+	&\vec{B_x}&\\
+	\hline
+	&\vec{B_y}&\\
+	\hline
+	&\vec{B_z}&\\
+	\end{array}
+	\right)	
+	\]
+	
+	Et soit $R_{AB}$ la matrice de rotation telle que:
+	
+	\[
+	\boxed{A=R_{AB}B} \quad \quad donc \quad \quad \boxed{R_{AB}=AB^T}
+	\]
+	
+	Les $R$ ainsi défini respectent la relation de Chasles, en effet si on introduit un troisième repère $C$ et $R_{AC}$,$R_{CB}$ les matrices de rotation telles que:
+	
+	\[
+	A=R_{AC}C\quad et \quad C=R_{CB}B  \quad\quad Soit\quad \quad R_{AC}=AC^T \quad et\quad  R_{CB}=CB^T
+	\]
+	
+	Alors 
+	
+	\[
+	R_{AC}R_{CB}=AC^TCB^T = AB^T
+	\]
+	Et donc 
+	\[
+	\boxed{R_{AC}R_{CB}=R_{AB}}
+	\]
+	
+	Maintenant, soit $V_{A}$ et $V_{B}$, des vecteurs exprimés respectivement dans les bases $A$ et $B$. Alors:
+	
+	\[
+	V_{A} A  =V_{B} B  \quad\quad Soit\quad \quad V_{A} = V_{B} B A^T 
+	\]
+	
+	Par conséquent on a :
+	
+	\[
+	\boxed{V_{A} = V_{B} R_{BA} }
+	\]
+	
+	
 \newpage
 \section{Représentation par SU(2)}
 	\subsection{Les matrices de Pauli}
@@ -554,7 +751,7 @@ b_y a_x- b_x a_y\\
 Donc finalement on a la relation :
 
 \[
- \boxed{ (\vec{a}\vec{\sigma}) (\vec{b}\vec{\sigma}) = \vec{a}.\vec{b} I + i(\vec{a}\times\vec{b}).\vec{\sigma}}
+ \boxed{ (\vec{a}.\vec{\sigma}) (\vec{b}.\vec{\sigma}) = \vec{a}.\vec{b} I + i(\vec{a}\times\vec{b}).\vec{\sigma}}
 \]
 
 On peut inverser la carte par la relation:
@@ -594,5 +791,115 @@ Ce qui donne bien :
 \[
 \boxed{r'=\cos(\phi) \vec{r} + \sin(\phi)(\vec{n}\times\vec{r}) + (1-\cos(\phi)) ( (\vec{n}.\vec{r})\vec{n}  )}
 \]
+
+\newpage
+\section{Annexes}
+\subsection{Retrouver l'identité à partir de la formule d'Euler-Rodrigue}
+Avec $M^T=-M$ et $(M^2)^T=M^2$ et $M^3=-M$ on verifie que:
+
+\begin{eqnarray*}
+	R^T R&=&(I+sin(\phi)M+(1-cos(\phi))M^2)^T (I+sin(\phi)M+(1-cos(\phi))M^2)\\
+	&=&I+sin(\phi)M^T+(1-cos(\phi))(M^2)^T+\\
+	&&(I+sin(\phi)M^T+(1-cos(\phi))(M^2)^T)sin(\phi)M+\\
+	&&(I+sin(\phi)M^T+(1-cos(\phi))(M^2)^T)(1-cos(\phi))M^2\\
+	&=&I+sin(\phi)M^T+(1-cos(\phi))(M^2)^T+\\
+	&&sin(\phi)M+sin(\phi)sin(\phi)M^TM+(1-cos(\phi))sin(\phi)(M^2)^TM+\\
+	&&(1-cos(\phi))M^2+sin(\phi)(1-cos(\phi))M^TM^2+(1-cos(\phi))^2(M^2)^TM^2\\
+	&=&I-sin(\phi)M+(1-cos(\phi))M^2+\\
+	&&sin(\phi)M-sin(\phi)sin(\phi)M^2-(1-cos(\phi))sin(\phi)M+\\
+	&&(1-cos(\phi))M^2-sin(\phi)(1-cos(\phi))M^3-(1-cos(\phi))^2M^2\\
+	&=&I+(2(1-cos(\phi))-sin(\phi)^2-(1-cos(\phi))^2)M^2\\
+	&=&I+(2-2cos(\phi)-sin(\phi)^2-1+2cos(\phi)-cos(\phi)^2)M^2\\
+	&=&I+(1-sin(\phi)^2-cos(\phi)^2)M^2\\
+	&=&I\\	
+\end{eqnarray*}
+
+\subsection{Erreur entre deux rotations (en cours...)}
+
+Soit $R_a$ et $R_b$ deux rotations d'angles $a$ et $b$ et de vecteur $A$ et $B$. On a alors 4 possibilités de calculer une rotation d'erreur entre $R_a$ et $R_b$.
+
+\[
+\boxed{E_1=R_a^T R_b \qquad
+E_2=R_b^T R_a \qquad
+E_3=R_a R_b^T \qquad
+E_4=R_b R_a^T \qquad}
+\]
+
+On peut observer que $E_1=E_2^T$ et $E_3=E_4^T$ donc ces rotations on le même angle et des axes opposés:
+
+\[
+\boxed{\begin{array}{c}
+angle(E_1)=angle(E_2)\qquad  et\qquad angle(E_3)=angle(E_4) \\
+axe(E_1)=-axe(E_2)\qquad  et\qquad axe(E_3)=-axe(E_4)\\
+\end{array}}
+\]
+
+De plus, si les erreurs sont petites, alors la composition des rotations est commutative et dans ce cas $E_1=E_4$ et $E_2=E_3$. 
+
+\[
+\boxed{\begin{array}{c}
+angle(E_1)=angle(E_2)=angle(E_3)=angle(E_4)\\
+axe(E_1)=-axe(E_2)=-axe(E_3)=axe(E_4)\\
+\end{array}
+\qquad pour\ de\ petites\ rotations}
+\]
+
+Cependant lorsque les erreurs sont importantes $E_1\ne E_4$, si on représente $R_a$ et $R_b$ par $U_a$ et $U_b$ , deux éléments de $SU(2)$, calculons:
+
+\[
+E_1=U_a^\dagger U_b \qquad E_3= U_b U_a^\dagger
+\]
+Avec 
+\[
+U_a = I \cos\left(\frac{a}{2}\right)-i \vec{A}.\vec{\sigma} \sin\left(\frac{a}{2}\right)\qquad\qquad
+U_b = I \cos\left(\frac{b}{2}\right)-i \vec{B}.\vec{\sigma} \sin\left(\frac{b}{2}\right)
+\]
+
+Commençons par $E_1$ :
+
+\begin{eqnarray*}
+E_1&=&\left( I \cos\left(\frac{a}{2}\right)+i \vec{A}.\vec{\sigma} \sin\left(\frac{a}{2}\right) \right)\left( I \cos\left(\frac{b}{2}\right)-i \vec{B}.\vec{\sigma} \sin\left(\frac{b}{2}\right) \right)\\
+&=& I \cos\left(\frac{a}{2}\right)\cos\left(\frac{b}{2}\right)+i \vec{A}.\vec{\sigma} \sin\left(\frac{a}{2}\right)\cos\left(\frac{b}{2}\right)  -i  \vec{B}.\vec{\sigma} \cos\left(\frac{a}{2}\right)\sin\left(\frac{b}{2}\right)+ \vec{A}.\vec{\sigma}\vec{B}.\vec{\sigma} \sin\left(\frac{a}{2}\right)\sin\left(\frac{b}{2}\right) \\
+\end{eqnarray*}
+
+Mais 
+\[
+\begin{array}{l}
+\sin(\frac{a}{2})cos(\frac{b}{2})=\frac{1}{2}\left(\sin\left(\frac{a-b}{2}\right)+\sin\left(\frac{a+b}{2}\right)\right)\\
+\cos(\frac{a}{2})sin(\frac{b}{2})=\frac{1}{2}\left(\sin\left(\frac{a+b}{2}\right)-\sin\left(\frac{a-b}{2}\right)\right)\\
+\cos(\frac{a}{2})cos(\frac{b}{2})=\frac{1}{2}\left(\cos\left(\frac{a-b}{2}\right)+\cos\left(\frac{a+b}{2}\right)\right)\\
+\sin(\frac{a}{2})sin(\frac{b}{2})=\frac{1}{2}\left(\cos\left(\frac{a-b}{2}\right)-\cos\left(\frac{a+b}{2}\right)\right)\\
+(\vec{A}.\vec{\sigma}) (\vec{B}.\vec{\sigma}) = \left(\vec{A}.\vec{B} I + i(\vec{A}\times\vec{B}).\vec{\sigma}\right)\\
+\end{array}
+\]
+
+\begin{eqnarray*}
+	E_1&=& I \frac{1}{2}\left(\cos\left(\frac{a-b}{2}\right)+\cos\left(\frac{a+b}{2}\right)\right)\\
+	&&+i \vec{A}.\vec{\sigma} \frac{1}{2}\left(\sin\left(\frac{a-b}{2}\right)+\sin\left(\frac{a+b}{2}\right)\right)\\
+	&&-i  \vec{B}.\vec{\sigma} \frac{1}{2}\left(\sin\left(\frac{a+b}{2}\right)-\sin\left(\frac{a-b}{2}\right)\right)\\
+	&&+ \left(\vec{A}.\vec{B} I + i(\vec{A}\times\vec{B}).\vec{\sigma}\right) \frac{1}{2}\left(\cos\left(\frac{a-b}{2}\right)-\cos\left(\frac{a+b}{2}\right)\right) \\
+	2 E_1&=& I \left((1+\vec{A}.\vec{B})\cos\left(\frac{a-b}{2}\right)+(1-\vec{A}.\vec{B})\cos\left(\frac{a+b}{2}\right)\right)\\
+	&&+i \left( \vec{A}.\vec{\sigma}\sin\left(\frac{a-b}{2}\right)+ \vec{A}.\vec{\sigma}\sin\left(\frac{a+b}{2}\right)\right)\\
+	&&+i \left(  -\vec{B}.\vec{\sigma}\sin\left(\frac{a+b}{2}\right)+  \vec{B}.\vec{\sigma}\sin\left(\frac{a-b}{2}\right)\right)\\
+	&&+i (\vec{A}\times\vec{B}).\vec{\sigma} \left(\cos\left(\frac{a-b}{2}\right)-\cos\left(\frac{a+b}{2}\right)\right) \\
+	2 E_1&=& I \left((1+\vec{A}.\vec{B})\cos\left(\frac{a-b}{2}\right)+(1-\vec{A}.\vec{B})\cos\left(\frac{a+b}{2}\right)\right)\\
+	&&+i \vec{\sigma}. \left( (\vec{A}+\vec{B})\sin\left(\frac{a-b}{2}\right)+ (\vec{A}-\vec{B})\sin\left(\frac{a+b}{2}\right)+(\vec{A}\times\vec{B}) \left(\cos\left(\frac{a-b}{2}\right)-\cos\left(\frac{a+b}{2}\right)\right)\right)\\
+\end{eqnarray*}
+
+\subsection{Logarithme of a rotation }
+
+Prouvons que :
+\[
+log(R)=\frac{\phi}{2 sin(\phi)}(R-R^T)
+\]
+
+\[
+||log(R)||_F=\sqrt(2)|\phi|
+\]
+
+\[
+||log(A^TB)||_F=d_g(A,B)
+\]
+is the geodesic distance on the 3D manifold of rotation matrices
 
 \end{document}
