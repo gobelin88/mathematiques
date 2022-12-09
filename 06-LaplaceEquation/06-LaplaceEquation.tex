@@ -1,0 +1,91 @@
+
+
+\documentclass[12pt,a4paper]{article}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\geometry{hmargin=1.0cm,vmargin=2.0cm}
+\setlength{\parindent}{0cm}
+\title{Équation de Laplace}
+\author{Loïc Huguel}
+
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+
+\begin{document}
+	\maketitle
+	
+	\tableofcontents
+	
+	\newpage
+	\section{L'équation}
+	
+	\[
+	\nabla^2 \Phi=\overrightarrow{\nabla}.\overrightarrow{\nabla \Phi}= \Delta \Phi =0
+	\]
+	
+	\section{L'équation en 3D cartesien}
+	
+	\[
+	\Delta \Phi = \frac{\partial^2 \Phi}{\partial x^2}+\frac{\partial^2 \Phi}{\partial y^2}+\frac{\partial^2 \Phi}{\partial z^2}=0
+	\]
+	
+	\subsection{Résolution par séparation de variables}
+	
+	On pose:
+	\[
+		\Phi(x,y,z)=A(x) B(y) C(z)
+	\]
+	Ce qui donne 
+	\[
+	\frac{\partial^2 A(x)}{\partial x^2}B(y)C(z)+\frac{\partial^2 B(y)}{\partial y^2}A(x)C(z)+\frac{\partial^2 C(z)}{\partial z^2}A(x)B(y)=0
+	\]
+	Si on divise par $A(x) B(y) C(z)$ cela donne :	
+	\[
+	\frac{1}{A(x)}\frac{\partial^2 A(x)}{\partial x^2}+\frac{1}{B(y)}\frac{\partial^2 B(y)}{\partial y^2}+\frac{1}{C(z)}\frac{\partial^2 C(z)}{\partial z^2}=0
+	\]
+	Posons 
+	\[
+		a=\frac{1}{A(x)}\frac{\partial^2 A(x)}{\partial x^2}\qquad
+		b=\frac{1}{B(y)}\frac{\partial^2 B(y)}{\partial y^2}\qquad
+		c=\frac{1}{C(z)}\frac{\partial^2 C(z)}{\partial z^2}
+	\]
+	Alors 
+	\[
+		a+b+c=0 \qquad c=-(a+b)
+	\]
+	Maintenant si on resoud
+	\[
+	\frac{1}{A(x)}\frac{\partial^2 A(x)}{\partial x^2}=a
+	\] 
+	\[
+	\frac{\partial^2 A(x)}{\partial x^2}- a A(x) = 0
+	\] 
+	Si on pose $A(x)=e^{x\lambda}$ on trouve:
+	\[
+	\lambda^2 e^{x\lambda}- a e^{x\lambda} = 0
+	\]
+	\[
+	\left(\lambda^2 - a \right)e^{x\lambda} = 0
+	\]
+	\[
+		\lambda = \pm \sqrt{a}
+	\]
+	Donc
+	\[
+		A(x)\propto e^{\pm x \sqrt{a}} \qquad B(y)\propto e^{\pm y \sqrt{b}} \qquad C(z)\propto e^{\pm z i \sqrt{a+b}}
+	\]
+	Finalement
+	\[
+		\boxed{\Phi_{ab}(x,y,z) \propto \ e^{\pm x \sqrt{a}} e^{\pm y \sqrt{b}} e^{\pm z i \sqrt{a+b}}}
+	\]
+	Et la solution générale
+	\[
+	\boxed{\Phi_{ab}(x,y,z)=\sum_{ab} C_{ab} e^{\pm x \sqrt{a}} e^{\pm y \sqrt{b}} e^{\pm z i \sqrt{a+b}}}
+	\]
+	
+
+\end{document}

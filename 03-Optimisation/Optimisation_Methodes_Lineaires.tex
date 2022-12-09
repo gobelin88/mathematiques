@@ -1,0 +1,245 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[francais]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{dsfont}
+\usepackage{lmodern,bm}
+\newcommand{\deriv}{\mathrm{d}}
+
+\geometry{hmargin=1.5cm,vmargin=1.5cm}
+
+\setlength{\parindent}{0cm}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+}
+
+\author{Loïc Huguel}
+
+\title{Optimisation\\Méthodes linéaires}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Les équations normales}
+
+On cherche à résoudre le système:
+
+\[
+	\boxed{\bm{A} \bm{x} = \bm{b}}
+\]
+
+Avec $\bm{b}$ et $\bm{x}$ des vecteurs et $\bm{A}$ une matrice. Bien sûr, si la matrice $\bm{A}$ inversible on a trivialement la solution :
+
+\[
+	\bm{x}=\bm{A}^{-1}\bm{b}
+\]
+
+Mais sinon, on cherche $\bm{\hat{x}}$ tel que l'erreur : $\bm{e}=\bm{A} \bm{x} - \bm{b}$ soit minimale au sens des moindre carrés, c'est à dire que on veut minimiser :
+
+\[
+	c(\bm{x})=\sum |e_i|^2= \bm{e}^T\bm{e} \qquad et \qquad \bm{\hat{x}} = \argmin_{\bm{x}} c(\bm{x})
+\]
+
+Soit 
+\begin{eqnarray*}
+	c(\bm{x})=\bm{e}^T\bm{e}&=&(\bm{A} \bm{x}-\bm{b})^T(\bm{A} \bm{x}-\bm{b})\\
+	    &=&(\bm{x}^T \bm{A}^T-\bm{b}^T)(\bm{A} x-\bm{b})\\
+		&=&\bm{x}^T \bm{A}^T\bm{A} \bm{x}-\bm{b}^T\bm{A} \bm{x}-\bm{x}^T \bm{A}^T \bm{b}-\bm{b}^T\bm{b}\\
+\end{eqnarray*}
+
+Et $\bm{b}^T\bm{A} \bm{x}$ est un scalaire donc $\bm{b}^T\bm{A} \bm{x}=(\bm{b}^T\bm{A} \bm{x})^T=\bm{x}^T \bm{A}^T \bm{b}$, donc finalement:\\
+
+\[
+	\boxed{c(\bm{x})=\bm{x}^T \bm{A}^T\bm{A} \bm{x} - 2 \bm{x}^T \bm{A}^T \bm{b} -\bm{b}^T\bm{b}}
+\]
+
+On obtient une forme quadratique convexe car $\bm{A}^T\bm{A}$ est semie-définie positive (ses valeurs propres sont positives ou nulles). Maintenant si on calcul le gradient par rapport à $\bm{x}$:
+
+\[
+	\frac{\deriv c(\bm{x})}{\deriv \bm{x}}=\left(\begin{array}{c} \frac{\partial c(\bm{x})}{\partial x_1}\\\frac{\partial c(\bm{x})}{\partial x_2}\\ ... \\ \frac{\partial c(\bm{x})}{\partial x_n}\\\end{array}\right)=2 \bm{A}^T\bm{A} \bm{x} - 2 \bm{A}^T \bm{b}
+\]
+La solution minimale s'obtient donc par : $\frac{d c(\bm{x})}{d\bm{x}}=0$ Ce qui donne:
+
+\[
+	\bm{A}^T\bm{A} \bm{\hat{x}} - \bm{A}^T \bm{b}=0 \qquad \Rightarrow \qquad \boxed{\bm{\hat{x}} = (\bm{A}^T\bm{A})^{-1} \bm{A}^T \bm{b}}
+\]
+
+Cela revient à projeter orthogonalement $\bm{b}$ dans l'espace des colonnes de $\bm{A}$ (cet espace est noté $col(\bm{A})$). On obtient simplement ce vecteur projeté par: $\bm{\bar{b}}=\bm{A}^T \bm{b}$, puis on cherche à résoudre pour ce vecteur, on retrouve la même solution avec cette considération géométrique:
+
+\[
+	\bm{A}^T\bm{A} \bm{\hat{x}} = \bm{A}^T \bm{b} \qquad \Rightarrow \qquad \boxed{\bm{\hat{x}} = (\bm{A}^T\bm{A})^{-1} \bm{A}^T \bm{b}}
+\]
+
+\begin{center}
+	\begin{tabular}{cc}
+	\raisebox{-1cm}{\includegraphics[height=2cm]{./normalEq.png}}&
+\begin{minipage}{8cm}
+	\[
+		\bm{A}=
+		\left(
+		\begin{array}{c|c|c}
+		&&\\
+		\bm{a_1}&\bm{a_2}&\hdots\\
+		&&\\
+		\end{array}
+		\right)
+		\quad 
+		\bm{A} \bm{x}= \sum_i \bm{a_i} x_i \in col(\bm{A})
+	\]
+\end{minipage}\\
+\end{tabular}
+\end{center}
+
+
+Si le rang de $\bm{A}$ est égal à son nombre de colonnes (c'est à dire que $\bm{A}^T\bm{A}$ est inversible) alors $\bm{A}^+$ est appelée la pseudo-inverse de $\bm{A}$:
+
+\[
+	\boxed{\bm{A}^+=(\bm{A}^T\bm{A})^{-1} \bm{A}^T} \qquad et \qquad \boxed{\bm{\hat{x}}=\bm{A}^+ \bm{b}}
+\]
+
+
+\newpage
+\section{Décomposition en valeurs singulières SVD}
+
+La décomposition en valeur singulière consiste à décomposer une matrice de la manière suivante:
+
+\[\boxed{\bm{A}=\bm{U} \bm{\Sigma} \bm{V}^*}\]
+
+Avec $\bm{U}$ et $\bm{V}$, des \textbf{matrices unitaires} c'est à dire que $\bm{U}\bm{U}^*=\bm{U}^*\bm{U}=\bm{I}$. Si $\bm{A}$ est une matrice réelle alors les matrices $\bm{U}$ et $\bm{V}$ sont des matrices à coefficients réels $\bm{U}^*=\bm{U}^T$ et $\bm{V}^*=\bm{V}^T$ et \textbf{sont orthogonales}. $\bm{\Sigma}$ est une matrice diagonale. $\Sigma_{ii}=\sigma_i$ sont \textbf{les valeurs singulières} de $\bm{A}$. Les valeurs singulières sont généralement rangées tel que $\sigma_1>\sigma_2>\sigma_3\hdots$. Cette décomposition permet de calculer une pseudo inverse dite de Moore-Penrose, notée généralement $\bm{A}^+$:
+
+\[ 
+	\boxed{\bm{A}^{+} = \bm{V} \bm{\Sigma}^{+} \bm{U}^*}
+	\qquad
+	avec
+	\qquad
+	\bm{\Sigma}^{+}_{ii}=\frac{1}{\sigma_i}\ ssi\ \sigma_i\ne 0\ sinon\ 0
+\]
+
+Notons que $\bm{\Sigma}$ est une matrice carrée si et seulement si $\bm{A}$ est une matrice carrée. Ce qui n'est généralement pas le cas. Par exemple si $\bm{A}$ est une matrice $(5 \times 3)$ on a :
+
+\[
+\bm{A}_{(5 \times 3)}=\bm{U}_{(5 \times 5)}\bm{\Sigma}_{(5 \times 3)}\bm{V}^*_{(3 \times 3)} 
+\]
+
+\[
+\bm{U}=
+\left(
+\begin{array}{c|c|c|c|c}
+&&&&\\
+&&&&\\
+\bm{u_1}&\bm{u_2}&\bm{u_3}&\bm{u_4}&\bm{u_5}\\
+&&&&\\
+&&&&\\
+\end{array}
+\right)
+\quad
+\bm{\Sigma}=
+\begin{pmatrix}
+\sigma_1&0&0\\
+0&\sigma_2&0\\
+0&0&\sigma_3\\
+0&0&0\\
+0&0&0\\
+\end{pmatrix}
+\quad
+\bm{V}=
+\left(
+\begin{array}{ccc}
+&\bm{v_1}^*&\\
+\hline
+&\bm{v_2}^*&\\
+\hline
+&\bm{v_3}^*&\\
+\end{array}
+\right)
+\]
+
+Cette décomposition est \textbf{complète}. Mais en fait, on comprend que on peut réduire $\bm{\Sigma}$ à une matrice $(n \times n)$, dans cet exemple $n=3$ est le nombre de valeurs singulières.
+
+\[
+\bm{A}_{(5 \times 3)}=\bm{U}_{(5 \times 3)}\bm{\Sigma}_{(3 \times 3)}\bm{V}^*_{(3 \times 3)} 
+\]
+
+\[
+\bm{U}=
+\left(
+\begin{array}{c|c|c}
+&&\\
+&&\\
+\bm{u_1}&\bm{u_2}&\bm{u_3}\\
+&&\\
+&&\\
+\end{array}
+\right)
+\quad
+\bm{\Sigma}=
+\begin{pmatrix}
+\sigma_1&0&0\\
+0&\sigma_2&0\\
+0&0&\sigma_3\\
+\end{pmatrix}
+\quad
+\bm{V}=
+\left(
+\begin{array}{ccc}
+&\bm{v_1}^*&\\
+\hline
+&\bm{v_2}^*&\\
+\hline
+&\bm{v_3}^*&\\
+\end{array}
+\right)
+\]
+
+Cette décomposition est dite \textbf{fine}. Mais on peut encore réduire la représentation de   $\bm{\Sigma}$ à une matrice ($r\times r$) ou $r$ est le rang de la matrice A. Dans notre exemple si $\sigma_3$ est nulle on aurait:
+
+\[
+\bm{A}_{(5 \times 3)}=\bm{U}_{(5 \times 2)}\bm{\Sigma}_{(2 \times 2)}\bm{V}^*_{(2 \times 3)} 
+\]
+
+\[
+\bm{U}=
+\left(
+\begin{array}{c|c}
+&\\
+&\\
+\bm{u_1}&\bm{u_2}\\
+&\\
+&\\
+\end{array}
+\right)
+\quad
+\bm{\Sigma}=
+\begin{pmatrix}
+\sigma_1&0\\
+0&\sigma_2\\
+\end{pmatrix}
+\quad
+\bm{V}=
+\left(
+\begin{array}{ccc}
+&\bm{v_1}^*&\\
+\hline
+&\bm{v_2}^*&\\
+\end{array}
+\right)
+\]
+Cette décomposition est dite \textbf{compacte}. Notons $\bm{u_i}$ la ième colonne de $\bm{U}$ et $\bm{v_i}^*$ la ième ligne de $\bm{V}$ alors la SVD correspond à décomposer $\bm{A}$ en une somme de matrices de rang 1, en effet:
+
+\[
+	\bm{A}=\sum_{i=0}^r \sigma_i \bm{u_i} \bm{v_i}^* \quad et \quad \bm{A}^{+}=\sum_{i=0}^r \frac{1}{\sigma_i} \bm{v_i} \bm{u_i}^*
+\]
+
+Avec $r$ le rang de la matrice $\bm{A}$. Notons également que $\bm{A}_r=\sigma_r \bm{u_r} \bm{v_r}^*$ est \textbf{la meilleure} approximation de rang $r$ de la matrice $\bm{A}$. 
+
+
+\end{document}

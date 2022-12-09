@@ -1,0 +1,243 @@
+
+
+\documentclass[12pt,a4paper]{article}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\geometry{hmargin=1.0cm,vmargin=2.0cm}
+\setlength{\parindent}{0cm}
+\title{Algorithme du pivot}
+\author{Loïc Huguel}
+
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+
+\begin{document}
+	\maketitle
+	
+	\tableofcontents
+	
+	\newpage
+	\section{Le point pivot}
+	
+	Soit deux référentiels $\mathbf{A}$ et $\mathbf{B}$ et un point $\mathbf{V}$, on a :
+	
+	\[
+		\mathbf{B}=\mathbf{A} \mathbf{R}_{AB} +\mathbf{T}_{AB} \qquad et \qquad
+		\mathbf{V}_A= \mathbf{R}_{AB} \mathbf{V}_B +\mathbf{T}_{AB}
+	\]
+	
+	Si on a une collection de $n$ relations acquises par un point pivot sur $V$ dans le référentiel $A$, alors:	
+	
+	\[
+	\left\{
+	\begin{array}{ccc}
+	\mathbf{V}_A&=& \mathbf{R}^1_{AB} \mathbf{V}_B +\mathbf{T}^1_{AB}\\
+	\mathbf{V}_A&=& \mathbf{R}^2_{AB} \mathbf{V}_B +\mathbf{T}^2_{AB}\\
+	...&=&...\\
+	\mathbf{V}_A&=& \mathbf{R}^n_{AB} \mathbf{V}_B +\mathbf{T}^n_{AB}\\
+	\end{array}
+	\right.
+	\qquad
+	Soit
+	\qquad
+	\left(
+	\begin{array}{c|c}
+	\mathbf{I} & -\mathbf{R}^1_{AB}\\
+	\mathbf{I} & -\mathbf{R}^2_{AB}\\
+	...&...\\
+	\mathbf{I} & -\mathbf{R}^n_{AB}\\
+	\end{array}
+	\right)		
+	\left(
+	\begin{array}{c}
+	\mathbf{V}_A \\
+	\mathbf{V}_B \\
+	\end{array}
+	\right)
+	=
+	\left(
+	\begin{array}{c}
+	\mathbf{T}^1_{AB} \\
+	\hline
+	\mathbf{T}^2_{AB} \\
+	\hline
+	...\\
+	\hline
+	\mathbf{T}^n_{AB}
+	\end{array}
+	\right)
+	\]
+
+	Si on pose 
+	
+	\[
+		\mathbf{A}=\left(
+		\begin{array}{c|c}
+		\mathbf{I} & -\mathbf{R}^1_{AB}\\
+		\mathbf{I} & -\mathbf{R}^2_{AB}\\
+		...&...\\
+		\mathbf{I} & -\mathbf{R}^n_{AB}\\
+		\end{array}
+		\right)
+		\qquad
+		\mathbf{X}=\left(
+		\begin{array}{c}
+		\mathbf{V}_A \\
+		\mathbf{V}_B \\
+		\end{array}
+		\right)
+		\qquad
+		et
+		\qquad
+		\mathbf{B}=
+		\left(
+		\begin{array}{c}
+		\mathbf{T}^1_{AB} \\
+		\hline
+		\mathbf{T}^2_{AB} \\
+		\hline
+		...\\
+		\hline
+		\mathbf{T}^n_{AB}
+		\end{array}
+		\right)
+	\]
+	
+	On peut alors minimiser $\mathbf{A}\mathbf{X}=\mathbf{B}$ par les équations normales:
+	
+	\[
+		\boxed{\hat{\mathbf{X}}=(\mathbf{A}^T\mathbf{A})^{-1} \mathbf{A}^T \mathbf{B}}
+	\]
+	
+	L'erreur minimisée est alors $|\mathbf{A}\mathbf{X}-\mathbf{B}|^2$ soit:
+	
+	\[
+		\boxed{E=\sum_{i=0}^n |\mathbf{V}_A - \mathbf{R}_{AB}^i \mathbf{V}_B +\mathbf{T}_{AB}^i|^2}
+	\]
+	
+	On obtient alors deux résultats qui sont les coordonnées du point $\mathbf{V}$ dans les référentiels $\mathbf{A}$ et $\mathbf{B}$ respectivement $\mathbf{V}_A$ et $\mathbf{V}_B$. Tel que la distance entre les deux points estimés soit minimale pour chaque transformation.\\
+	
+	\textbf{Avantages/Inconvénients:}
+	\begin{itemize}
+		\item $-$ Attention à ne pas rester sur place.
+		\item $-$ Si on bouge peu, la méthode est instable.	
+		\item $+$ Chaque point compte autant qu'un autre indépendamment de la vitesse et/ou fréquence d'acquisition.
+		\item $+$ Estimation de $\mathbf{V}_A$ et $\mathbf{V}_B$.			
+	\end{itemize}
+	
+	\newpage
+	\section{Variante dit LMP "Least Moving Point"}
+	
+	On peut éliminer $\mathbf{V}_A$ en effectuant les différences 2 à deux des équations du point pivot, cela donne:
+	
+	\[
+	\left\{
+	\begin{array}{ccc}
+	0&=& (\mathbf{R}^1_{AB}-\mathbf{R}^2_{AB}) \mathbf{V}_B +\mathbf{T}^1_{AB}-\mathbf{T}^2_{AB}\\
+	0&=& (\mathbf{R}^2_{AB}-\mathbf{R}^3_{AB}) \mathbf{V}_B +\mathbf{T}^2_{AB}-\mathbf{T}^3_{AB}\\
+	...&=&...\\
+	0&=& (\mathbf{R}^{n-1}_{AB}-\mathbf{R}^n_{AB}) \mathbf{V}_B +\mathbf{T}^{n-1}_{AB}-\mathbf{T}^n_{AB}\\
+	\end{array}
+	\right.
+	\qquad
+	Posons
+	\qquad
+	\left\{
+	\begin{array}{l} 
+	\mathbf{R^n}=\mathbf{R}^{n}_{AB}-\mathbf{R}^{n+1}_{AB}\\
+	\mathbf{T^n}=\mathbf{T}^{n}_{AB}-\mathbf{T}^{n+1}_{AB}\\
+	\end{array}
+	\right.
+	\]
+	
+	Sous forme matricielle on obtient alors
+	\[
+	\qquad
+	\left(
+	\begin{array}{c}
+	-\mathbf{R}^1\\
+	-\mathbf{R}^2\\
+	...\\
+	-\mathbf{R}^{n-1}\\
+	\end{array}
+	\right)		
+	\left(
+	\begin{array}{c}
+	\mathbf{V}_B \\
+	\end{array}
+	\right)
+	=
+	\left(
+	\begin{array}{c}
+	\mathbf{T}^1 \\
+	\hline
+	\mathbf{T}^2 \\
+	\hline
+	...\\
+	\hline
+	\mathbf{T}^{n-1}
+	\end{array}
+	\right)
+	\]
+	
+	Maintenant si on pose 
+	
+	\[
+	\mathbf{A}=\left(
+	\begin{array}{c}
+	-\mathbf{R}^1\\
+	-\mathbf{R}^2\\
+	...\\
+	-\mathbf{R}^{n-1}\\
+	\end{array}
+	\right)		
+	\qquad 
+	\mathbf{X}=\mathbf{V}_B
+	\qquad
+	et
+	\qquad
+	\mathbf{B}=\left(
+	\begin{array}{c}
+	\mathbf{T}^1 \\
+	\hline
+	\mathbf{T}^2 \\
+	\hline
+	...\\
+	\hline
+	\mathbf{T}^{n-1}
+	\end{array}
+	\right)	
+	\]
+	
+	On peut alors minimiser $\mathbf{A}\mathbf{X}=\mathbf{B}$ par les équations normales et l'erreur minimisée est alors $E=|\mathbf{A}\mathbf{X}-\mathbf{B}|^2$ soit:
+	
+	\[
+	\boxed{\hat{\mathbf{X}}=(\mathbf{A}^T\mathbf{A})^{-1} \mathbf{A}^T \mathbf{B}}
+	\qquad et \qquad \boxed{E=\sum_{i=0}^{n-1} |\mathbf{R}^i \mathbf{V}_B+\mathbf{T}^i|^2}
+	\]
+	
+	Cette erreur correspond à la somme des distances parcourues par le point $\mathbf{V}_A$. En effet 
+	
+	\begin{eqnarray*}
+		d_A(\mathbf{V}_B) &=& \sum_i^{n-1} |\mathbf{V}_A^{i}-\mathbf{V}_A^{i+1}|^2\\
+		&=&\sum_i^{n-1} | \mathbf{R}_{AB}^{i} \mathbf{V}_B +\mathbf{T}^{i}_{AB}-(\mathbf{R}_{AB}^{i+1} \mathbf{V}_B +\mathbf{T}^{i+1}_{AB})|^2 \\
+		&=&\sum_i^{n-1} | (\mathbf{R}_{AB}^{i}-\mathbf{R}_{AB}^{i+1}) \mathbf{V}_B +\mathbf{T}^{i}_{AB}- \mathbf{T}^{i+1}_{AB}|^2 \\
+		&=&\sum_i^{n-1} | \mathbf{R}^{i} \mathbf{V}_B +\mathbf{T}^{i}|^2 \\
+	\end{eqnarray*}	
+	
+	Cet algorithme trouve donc le point $\mathbf{V}_B$ qui minimise $d_A(\mathbf{V}_B)$.\\
+	
+	
+	\textbf{Avantages/Inconvénients:}
+	\begin{itemize}
+		\item $-$ Dépendant de la vitesse de mouvement et/ou de la fréquence d'acquisition.
+		\item $+$ Si on reste sur place c'est pas grave.
+		\item $-$ Si on bouge peu, la méthode est instable.
+		\item $\pm$ La méthode peu être améliorer en considérant tous les couples possible d'équations pour substituer $\mathbf{V}_A$ ce qui ferait $n^2$ équations.
+	\end{itemize} 
+
+\end{document}

@@ -4,6 +4,10 @@
 \usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{hyperref}
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\usepackage{dsfont}
 
 \geometry{hmargin=1.5cm,vmargin=1.5cm}
 
@@ -41,19 +45,7 @@ La solution est donc:
 
 \[X=argmin(S(X))\]
 
-	\subsection{Cas linéaire:}
-	
-Dans le cas ou la fonction $f$	est linéaire par rapport au vecteur d'état X. On peut alors écrire le système d'equations suivant:
-
-\[ UX=Y \]
-
-Le problème revient alors à calculer la pseudo-inverse de la matrice U. La solution est donc:
-
-\[ X=U^{-1}Y \]
-
-Ou $U^{-1}$ est la pseudo inverse de U. Généralement on calcule $U^{-1}$ au sens des moindres carrés, c'est à dire tel que $|Y-UX|$ soit minimale.
-
-\section{Méthodes Générales}
+\section{Méthodes itératives}
 \subsection{Descente de gradient}
 
 On choisit un point de départ $X_0$ puis on cherche un état suivant $X_{k+1}$ tel que $S(X_{k+1})<S(X_k)$
@@ -89,26 +81,242 @@ Maquardt suggère alors de pondérer la matrice identité par la la diagonale de $J
 Le paramètre $\lambda$ est alors ajusté en fonction de la rapidité de la convergence. Si on converge rapidement alors on diminue $\lambda$ et réciproquement. \\
 Cependant la notion de rapidité de convergence est très subjective, car elle dépend de l'échelle à laquelle on regarde le système.
 
-\section{Méthodes Linéaires}
+\newpage
+\section{Méthodes linéaires}
+
+\subsection{Les équations normales}
+
+On cherche à résoudre le système:
+
+\[
+	\boxed{A x = b}
+\]
+
+Avec $b$ et $x$ des vecteurs et $A$ une matrice. Bien sûr, si la matrice $A$ inversible on a trivialement la solution :
+
+\[
+	x=A^{-1}b
+\]
+
+Mais sinon, on cherche $\hat{x}$ veut que $E=A x - b$ soit minimale au sens des moindre carrés c'est à dire que on veut minimiser :
+
+\[
+	c(x)=\sum e_i^2= E^TE \qquad et \qquad \hat{x} = \argmin_x c(x)
+\]
+
+Soit 
+\begin{eqnarray*}
+	E^TE&=&(A x-b)^T(A x-b)\\
+	    &=&(x^T A^T-b^T)(A x-b)\\
+	c(x)&=&x^T A^TA x-b^TA x-x^T A^T b-b^Tb\\
+\end{eqnarray*}
+
+Et $b^TA x$ est un scalaire donc $b^TA x=(b^TA x)^T=x^T A^T b$, donc finalement:\\
+
+\[
+	\boxed{c(x)=x^T A^TA x - 2 x^T A^T b -b^Tb}
+\]
+
+On obtient une forme quadratique convexe car $A^TA$ est semie-définie positive (ses valeurs sont positives ou nulles). Maintenant si on calcul le gradient par rapport à $x$:
+
+\[
+	\frac{d c(x)}{dx}=\left(\begin{array}{c} \frac{\partial c(x)}{\partial x_1}\\\frac{\partial c(x)}{\partial x_2}\\ ... \\ \frac{\partial c(x)}{\partial x_n}\\\end{array}\right)=2 A^TA x - 2 A^T b
+\]
+La solution minimale s'obtient donc par : $\frac{d c(x)}{dx}=0$ Ce qui donne:
+
+\[
+	A^TA \hat{x} - A^T b=0 \qquad \Rightarrow \qquad \boxed{\hat{x} = (A^TA)^{-1} A^T b}
+\]
+
+Cela revient à projeter orthogonalement $b$ dans l'espace des colonnes de $A$ (noté col(A)).c'est à dire $\bar{b}=A^T b$, et de chercher à résoudre pour ce vecteur on retrouve la même solution avec cette considération géométrique:
+
+\[
+	A^TA \hat{x} = A^T b \qquad \Rightarrow \qquad \boxed{\hat{x} = (A^TA)^{-1} A^T b}
+\]
+
+\begin{center}
+	\begin{tabular}{cc}
+	\raisebox{-1cm}{\includegraphics[height=2cm]{./normalEq.png}}&
+\begin{minipage}{8cm}
+	\[
+		A=
+		\left(
+		\begin{array}{c|c|c}
+		&&\\
+		a_1&a_2&\hdots\\
+		&&\\
+		\end{array}
+		\right)
+		\quad 
+		A x= \sum_i a_i x_i \in col(A)
+	\]
+\end{minipage}\\
+\end{tabular}
+\end{center}
 
 
+Si le rang de $A$ est égal à son nombre de colonnes (c'est à dire que $A^TA$ est inversible) alors $A^+$ est appelée la pseudo-inverse de $A$:
 
+\[
+	\boxed{A^+=(A^TA)^{-1} A^T} \qquad et \qquad \boxed{\hat{x}=A^+ b}
+\]
+
+
+\newpage
 \subsection{Décomposition en valeurs singulières SVD}
 
 La décomposition en valeur singulière consiste à décomposer une matrice de la manière suivante:
 
-\[A=U W V^*\]
+\[\boxed{A=U \Sigma V^*}\]
 
-U et V des matrices unitaires c'est à dire que $UU^*=U^*U=I$\\
-L'opération "*" est le conjugué Hermitien. Si U est une matrice à coefficients réels $U^*=U^T$
+Avec U et V, des \textbf{matrices unitaires} c'est à dire que $UU^*=U^*U=I$. Si A est une matrice réelle alors les matrices U et V sont des matrices à coefficients réels $U^*=U^T$ et $V^*=V^T$ et \textbf{sont orthogonales}. $\Sigma$ est une matrice diagonale. $\Sigma_{(i,i)}=\sigma_i$ sont \textbf{les valeurs singulières} de $A$. Les valeurs singulières sont généralement rangées tel que $\sigma_1>\sigma_2>\sigma_3\hdots$. Cette décomposition permet de calculer une pseudo inverse dite de Moore-Penrose, notée généralement $A^+$, de la matrice A.
 
-Cette décomposition permet de calculer une pseudo inverse au sens des moindre carrés, de la matrice M.
+\[ 
+	\boxed{A^{+} = V \Sigma^{+} U^*}
+	\qquad
+	avec
+	\qquad
+	\Sigma^{+}_{(i,i)}=\frac{1}{\sigma_i}\ ssi\ \sigma_i\ne 0\ sinon\ 0
+\]
 
-\[ A^{-1} = V W^{-1} U^* \]
+Comprenons bien que $\Sigma$ est une matrice carrée si et seulement si $A$ est une matrice carrée. Ce qui n'est généralement pas le cas. Par exemple si $A$ est une matrice $(5 \times 3)$ on a :
 
-en effet on a bien avec les propriétés des matrices unitaires :
+\[
+A_{(5 \times 3)}=U_{(5 \times 5)}\Sigma_{(5 \times 3)}V^*_{(3 \times 3)} 
+\]
 
-\[ A^{-1}A = (V W^{-1} U^*)(U W V^*) = I \]
-\[ AA^{-1} = (U W V^*)(V W^{-1} U^*) = I \]
+\[
+U=
+\left(
+\begin{array}{c|c|c|c|c}
+&&&&\\
+&&&&\\
+u_1&u_2&u_3&u_4&u_5\\
+&&&&\\
+&&&&\\
+\end{array}
+\right)
+\quad
+\Sigma=
+\begin{pmatrix}
+\sigma_1&0&0\\
+0&\sigma_2&0\\
+0&0&\sigma_3\\
+0&0&0\\
+0&0&0\\
+\end{pmatrix}
+\quad
+V=
+\left(
+\begin{array}{ccc}
+&v_1^*&\\
+\hline
+&v_2^*&\\
+\hline
+&v_3^*&\\
+\end{array}
+\right)
+\]
+
+Cette décomposition est \textbf{complète}. Mais en fait, on comprend que on peut réduire $\Sigma$ à une matrice $(n \times n)$, dans cet exemple $n=3$ est le nombre de valeurs singulières.
+
+\[
+A_{(5 \times 3)}=U_{(5 \times 3)}\Sigma_{(3 \times 3)}V^*_{(3 \times 3)} 
+\]
+
+\[
+U=
+\left(
+\begin{array}{c|c|c}
+&&\\
+&&\\
+u_1&u_2&u_3\\
+&&\\
+&&\\
+\end{array}
+\right)
+\quad
+\Sigma=
+\begin{pmatrix}
+\sigma_1&0&0\\
+0&\sigma_2&0\\
+0&0&\sigma_3\\
+\end{pmatrix}
+\quad
+V=
+\left(
+\begin{array}{ccc}
+&v_1^*&\\
+\hline
+&v_2^*&\\
+\hline
+&v_3^*&\\
+\end{array}
+\right)
+\]
+
+Cette décomposition est dite \textbf{fine}. Mais on peut encore réduire la représentation de   $\Sigma$ à une matrice ($r\times r$) ou $r$ est le rang de la matrice A. Dans notre exemple si $\sigma_3$ est nulle on aurait:
+
+\[
+A_{(5 \times 3)}=U_{(5 \times 2)}\Sigma_{(2 \times 2)}V^*_{(2 \times 3)} 
+\]
+
+\[
+U=
+\left(
+\begin{array}{c|c}
+&\\
+&\\
+u_1&u_2\\
+&\\
+&\\
+\end{array}
+\right)
+\quad
+\Sigma=
+\begin{pmatrix}
+\sigma_1&0\\
+0&\sigma_2\\
+\end{pmatrix}
+\quad
+V=
+\left(
+\begin{array}{ccc}
+&v_1^*&\\
+\hline
+&v_2^*&\\
+\end{array}
+\right)
+\]
+Cette décomposition est dite \textbf{compacte}. Notons $u_i$ la ième colonne de $U$ et $v_i^*$ la ième ligne de $V$ alors la SVD correspond à décomposer $A$ en une somme de matrices de rang 1, en effet:
+
+\[
+	A=\sum_{i=0}^r \sigma_i u_i v_i^* \quad et \quad A^{+}=\sum_{i=0}^r \frac{1}{\sigma_i} v_i u_i^*
+\]
+
+Avec $r$ le rang de la matrice $A$. Notons également que $A_r=\sigma_r u_r v_r^*$ est \textbf{la meilleure} approximation de rang $r$ de la matrice $A$. 
+
+
+\newpage
+\hrule
+Et avec l'orthogonalité des colonnes de U et V:  $u_j^* u_i = v_j^* v_i = \delta_{ij}$ donc finalement on a:
+
+\[
+	AA^{+}=\sum_{j=0}^r\sum_{i=0}^r \sigma_j u_j v_j^* \frac{1}{\sigma_i} v_i u_i^*=\sum_{j=0}^r\sum_{i=0}^r \frac{\sigma_j}{\sigma_i} u_j v_j^* v_i u_i^* = I
+\]
+
+Maintenant si $\sigma_2=0$ on aura 
+
+\[
+AA^{+}=\sum_{j=0}^r\sum_{\sigma_i\ne0}^r \sigma_j u_j v_j^* \frac{1}{\sigma_i} v_i u_i^*=\sum_{j=0}^r\sum_{\sigma_i\ne0}^r \frac{\sigma_j}{\sigma_i} u_j v_j^* v_i u_i^* = \begin{pmatrix}
+1&0&0&...\\
+0&1&0&...\\
+0&0&0&...\\
+\vdots&\vdots&\vdots&\ddots\\
+\end{pmatrix}
+\]
+
+Pour calculer les pseudo-inverse, cette méthode fonctionne même si le rang de $A$ n'est pas égal à son nombre de colonnes.
+
 
 \end{document}
