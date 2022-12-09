@@ -15,6 +15,8 @@
 \usepackage{bm}
 \DeclarePairedDelimiter\ceil{\lceil}{\rceil}
 \DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
 
 \newcommand{\unit}
 {
@@ -888,7 +890,7 @@ Soit $\hat{R}$ une estimation d'une matrice de rotation. Si on décompose en val
 	
 $R$ est la matrice de rotation la plus proche de $\hat{R}$ au sens de la distance $D_5$.
 
-\subsection{Rotation moyenne}
+\subsection{Rotation moyenne SO(3)}
 
 Soit $R_k$ une collection de $N$ rotations, on souhaite trouver $R$ une rotation moyenne au sens ou la somme suivante est minimale:
 
@@ -909,5 +911,21 @@ Puis par on cherche la rotation la plus proche de $\hat{R}$ avec la méthode \re
 \]
 
 Alors $R$ est l'unique rotation minimisant la somme des écarts au carré au sens de la distance $D_5$.
+
+\subsection{Rotation moyenne pondérée Sp(1)}
+
+Soit $N$ quaternions $\bm{q}_i$ exprimés commre vecteurs de $\mathbb{R}^4$ et $N$ poids $\omega_i$ On construit la matrice 4x4 .\\
+
+\[
+\bm{M}=\sum_{n=1}^N \omega_i \bm{q}_i \bm{q}^T_i
+\]
+
+Alors le quaternion moyen est donné par 
+
+\[
+\bm{\hat{q}}= \argmax_{q\in S^3} \bm{q} \bm{M} \bm{q}^T
+\]
+
+La solution est alors le vecteur propre de $\bm{M}$ associé à la plus grande valeur propre de $\bm{M}$. On veillera à ce que le vecteur propre soit bien de norme unitaire. Notons que l'ambiguïté du signe est bien prise en compte dans la construction de $\bm{M}$.
 
 \end{document}
